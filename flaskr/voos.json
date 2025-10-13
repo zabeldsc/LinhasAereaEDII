@@ -1,0 +1,11 @@
+{
+    "1760317611": {
+        "codigo": "LBR777",
+        "origem": "SalvadorBA",
+        "destino": "Sao LuisMA",
+        "milhas": "4500",
+        "preco_passagem": "1200.25",
+        "tipo_aeronave": "Convencional",
+        "num_assentos": "100"
+    }
+}

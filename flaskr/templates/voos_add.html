@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Adicionar Voo</title>
+</head>
+<body>
+    <h1>Adicionar Voo</h1>
+    <hr>
+
+    <form action="/admin/voos/save" method="POST">
+        <div>
+            <label for="codigo">Codigo:</label><br>
+            <input type="text" name="codigo" id="codigo" required>
+        </div>
+        <br>
+            <div>
+            <label for="origem">Origem:</label><br>
+            <input type="text" name="origem" id="origem" required>
+        </div>
+        <br>
+            <div>
+            <label for="destino">Destino:</label><br>
+            <input type="text" name="destino" id="destino" required>
+        </div>
+        <br>
+            <div>
+            <label for="milhas">Milhas:</label><br>
+            <input type="number" min="0" step="1" name="milhas" id="milhas" required>
+        </div>
+        <br>
+            <div>
+            <label for="preco_passagem">Preco da Passagem:</label><br>
+            <input type="number" min="0" step="0.01" name="preco_passagem" id="preco_passagem" required>
+        </div>
+        <br>
+            <div>
+            <label for="tipo_aeronave">Tipo da Aeronave:</label><br>
+            <input type="text" name="tipo_aeronave" id="tipo_aeronave" required>
+        </div>
+        <br>
+            <div>
+            <label for="num_assentos">Numero de Assentos:</label><br>
+            <input type="number" min="0" step="1" name="num_assentos" id="num_assentos" required>
+        </div>
+        <br>
+        <div>
+            <button type="submit">Salvar Voo</button>
+        </div>
+    </form>
+    
+    <br>
+    <a href="/admin/voos">Retornar a Lista de Voos</a>
+</body>
+</html>
