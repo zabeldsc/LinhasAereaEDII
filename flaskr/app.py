@@ -5,6 +5,36 @@ import time
 app = Flask(__name__)
 data.load_voos()
 
+@app.route('/')
+def pagina_inicial():
+    return render_template('pagina_inicial.html')
+
+@app.route('/admin')
+def pagina_login():
+    return render_template('login.html')
+
+@app.route('/admin/login', methods=['POST'])
+def acess_login():
+    data.load_user_keys()
+    erro = None
+
+    user = request.form["usuario"]
+    pw = request.form["senha"]
+
+    if user not in data.user_keys:
+        erro = "User não encontrado"
+        return redirect(url_for('pagina_login', erro=erro))
+    
+    dados = data.user_keys[user]
+
+    if pw == dados["senha"]:
+        data.save_user_keys()
+        return redirect(url_for('pagina_voos'))
+    
+    else:
+        erro = "Senha incorreta"
+        return redirect(url_for('pagina_login', erro=erro))
+    
 @app.route('/admin/voos')
 def pagina_voos():
     return render_template('voos.html',voos=data.voos)
