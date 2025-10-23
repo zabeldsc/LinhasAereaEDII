@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block title %}Página Inicial{% endblock %}
+
+{% block content %}
+<div class="text-center mb-5">
+    <h1 class="text-primary mb-3">Bem-vindo ao Sistema de Voos</h1>
+    <p class="mb-4 fs-5">Confira os voos disponíveis:</p>
+</div>
+
+{% if voos %}
+    <div class="row row-cols-1 row-cols-md-3 g-4">
+        {% for id, voo in voos.items() %}
+        <div class="col">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">{{ voo.codigo }}</h5>
+                    <p class="card-text">
+                        <strong>Origem:</strong> {{ voo.origem }}<br>
+                        <strong>Destino:</strong> {{ voo.destino }}<br>
+                        <strong>Milhas:</strong> {{ voo.milhas }}<br>
+                        <strong>Preço:</strong> R$ {{ voo.preco_passagem }}
+                    </p>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+{% else %}
+    <div class="alert alert-info text-center">Nenhum voo disponível no momento.</div>
+{% endif %}
+{% endblock %}

@@ -1,5 +1,8 @@
 {
-    "admin": {
-        "senha": "12345"
-    }
+    "joao": {"senha": "senha123"},
+    "maria": {"senha": "abc123"},
+    "pedro": {"senha": "pass2025"},
+    "ana": {"senha": "voo456"},
+    "carlos": {"senha": "admin789"},
+    "beatriz": {"senha": "flask2025"}
 }
