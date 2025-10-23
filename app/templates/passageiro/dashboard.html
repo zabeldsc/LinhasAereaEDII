@@ -1,0 +1,74 @@
+{% extends "passageiro/base_passageiro.html" %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+<div class="row">
+    <!-- Painel de boas-vindas -->
+    <div class="col-12 mb-4">
+        <div class="card shadow-sm p-3">
+            <h3 class="text-primary">Bem-vindo, {{ nome }}!</h3>
+            <p>Você possui <strong>{{ milhas }}</strong> milhas acumuladas.</p>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <!-- Consultar Voos -->
+    <div class="col-md-6 mb-4">
+        <div class="card shadow-sm h-100">
+            <div class="card-body d-flex flex-column justify-content-between">
+                <h5 class="card-title">Consultar Voos</h5>
+                <p class="card-text">Pesquise voos disponíveis para o seu destino e visualize horários.</p>
+                <a href="{{ url_for('passageiro.consultar_voos') }}" class="btn btn-primary mt-auto">Consultar Voos</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Simular Conexões -->
+    <div class="col-md-6 mb-4">
+        <div class="card shadow-sm h-100">
+            <div class="card-body d-flex flex-column justify-content-between">
+                <h5 class="card-title">Simular Conexões</h5>
+                <p class="card-text">Simule rotas entre voos usando o grafo de conexões.</p>
+                <a href="{{ url_for('passageiro.simular_conexoes') }}" class="btn btn-primary mt-auto">Simular Rota</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <!-- Minhas Reservas -->
+    <div class="col-12 mb-4">
+        <div class="card shadow-sm p-3">
+            <h5 class="card-title">Minhas Reservas</h5>
+            {% if reservas %}
+                <table class="table table-striped mt-3">
+                    <thead>
+                        <tr>
+                            <th>Código Reserva</th>
+                            <th>Voo</th>
+                            <th>Origem</th>
+                            <th>Destino</th>
+                            <th>Data</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for reserva in reservas %}
+                            <tr>
+                                <td>{{ reserva.codigo }}</td>
+                                <td>{{ reserva.voo }}</td>
+                                <td>{{ reserva.origem }}</td>
+                                <td>{{ reserva.destino }}</td>
+                                <td>{{ reserva.data }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                <p class="text-muted">Você ainda não realizou nenhuma reserva.</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

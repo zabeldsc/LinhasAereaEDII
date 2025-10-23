@@ -1,0 +1,32 @@
+{
+    "carlos@example.com": {
+        "nome": "Carlos Silva",
+        "senha": "admin789",
+        "tipo": "admin"
+    },
+    "beatriz@example.com": {
+        "nome": "Beatriz Souza",
+        "senha": "flask2025",
+        "tipo": "admin"
+    },
+    "joao@example.com": {
+        "nome": "João Pereira",
+        "senha": "senha123",
+        "tipo": "passageiro"
+    },
+    "maria@example.com": {
+        "nome": "Maria Oliveira",
+        "senha": "abc123",
+        "tipo": "passageiro"
+    },
+    "pedro@example.com": {
+        "nome": "Pedro Lima",
+        "senha": "pass2025",
+        "tipo": "passageiro"
+    },
+    "isabel@example.com": {
+        "senha": "pass2502",
+        "tipo": "passageiro",
+        "nome": "Isabel Costa"
+    }
+}

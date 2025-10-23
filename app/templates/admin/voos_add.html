@@ -1,0 +1,58 @@
+{% extends "admin/base_admin.html" %}
+
+{% block title %}Adicionar Voo{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8 col-lg-6">
+        <div class="card shadow-sm p-4">
+            <h1 class="text-center mb-4 text-primary">Adicionar Voo</h1>
+            <hr>
+
+            <form action="/admin/voos/save" method="POST">
+
+                <div class="mb-3">
+                    <label for="codigo" class="form-label">Código:</label>
+                    <input type="text" name="codigo" id="codigo" class="form-control" required>
+                </div>
+
+                <div class="mb-3">
+                    <label for="origem" class="form-label">Origem:</label>
+                    <input type="text" name="origem" id="origem" class="form-control" required>
+                </div>
+
+                <div class="mb-3">
+                    <label for="destino" class="form-label">Destino:</label>
+                    <input type="text" name="destino" id="destino" class="form-control" required>
+                </div>
+
+                <div class="mb-3">
+                    <label for="milhas" class="form-label">Milhas:</label>
+                    <input type="number" min="0" step="1" name="milhas" id="milhas" class="form-control" required>
+                </div>
+
+                <div class="mb-3">
+                    <label for="preco_passagem" class="form-label">Preço da Passagem:</label>
+                    <input type="number" min="0" step="0.01" name="preco_passagem" id="preco_passagem" class="form-control" required>
+                </div>
+
+                <div class="mb-3">
+                    <label for="tipo_aeronave" class="form-label">Tipo da Aeronave:</label>
+                    <input type="text" name="tipo_aeronave" id="tipo_aeronave" class="form-control" required>
+                </div>
+
+                <div class="mb-3">
+                    <label for="num_assentos" class="form-label">Número de Assentos:</label>
+                    <input type="number" min="0" step="1" name="num_assentos" id="num_assentos" class="form-control" required>
+                </div>
+
+                <div class="d-flex justify-content-between mt-4">
+                    <a href="/admin/voos" class="btn btn-secondary">← Voltar</a>
+                    <button type="submit" class="btn btn-success">Salvar Voo</button>
+                </div>
+
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
