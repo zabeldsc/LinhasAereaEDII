@@ -1,5 +1,6 @@
 from functools import wraps
 from flask import Blueprint, render_template, request, redirect, url_for, session, flash, current_app
+from app import data
 
 user_bp = Blueprint('user', __name__, url_prefix='/user')
 
@@ -38,23 +39,27 @@ def login_required_admin(f):
 @user_bp.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
-        usuario_form = request.form.get('usuario')
+        email_form = request.form.get('email')
         senha_form = request.form.get('senha')
         usuarios = current_app.config.get('USER_KEYS', {})
 
-        if usuario_form in usuarios and usuarios[usuario_form]['senha'] == senha_form:
-            tipo = usuarios[usuario_form]['tipo']
-            session['usuario'] = usuario_form
+        if email_form in usuarios and usuarios[email_form]['senha'] == senha_form:
+            tipo = usuarios[email_form]['tipo']
+            nome = usuarios[email_form].get('nome', email_form)
+
+            # Sessão
+            session['usuario'] = email_form
+            session['nome'] = nome
             session['tipo'] = tipo
 
-            flash(f'Bem-vindo, {usuario_form}!', 'success')
+            flash(f'Bem-vindo, {nome}!', 'success')
 
             if tipo == 'admin':
-                return redirect(url_for('admin.pagina_voos')) 
+                return redirect(url_for('admin.pagina_voos'))
             else:
                 return redirect(url_for('passageiro.dashboard'))
         else:
-            flash('Usuário ou senha incorretos.', 'error')
+            flash('Email ou senha incorretos.', 'error')
 
     return render_template('user/login.html')
 
@@ -66,3 +71,34 @@ def logout():
     session.clear()
     flash('Você saiu da conta com sucesso!', 'success')
     return redirect(url_for('user.pagina_inicial'))
+
+# ----------------------
+# Cadastro
+# ----------------------
+@user_bp.route('/cadastro', methods=['GET', 'POST'])
+def cadastro():
+    if request.method == 'POST':
+        nome = request.form.get('nome')
+        email = request.form.get('email')
+        senha = request.form.get('senha')
+
+        user_keys = current_app.config.get('USER_KEYS', {})
+
+        if email in user_keys:
+            flash('Email já cadastrado!', 'error')
+        else:
+            # Cria novo usuário tipo passageiro
+            user_keys[email] = {
+                'senha': senha,
+                'tipo': 'passageiro',
+                'nome': nome
+            }
+
+            # Atualiza o config e salva no JSON
+            current_app.config['USER_KEYS'] = user_keys
+            data.save_user_keys(user_keys)
+
+            flash('Cadastro realizado com sucesso!', 'success')
+            return redirect(url_for('user.login'))
+
+    return render_template('user/cadastro.html')

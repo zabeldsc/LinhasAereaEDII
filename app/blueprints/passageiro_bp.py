@@ -6,11 +6,11 @@ passageiro_bp = Blueprint('passageiro', __name__, url_prefix='/passageiro')
 @passageiro_bp.route('/dashboard')
 @login_required_passageiro
 def dashboard():
-    usuario = session['usuario']
+    nome = session['nome']
     voos = current_app.config.get('VOOS', {})
-    reservas = current_app.config.get('RESERVAS', {}).get(usuario, [])
+    reservas = current_app.config.get('RESERVAS', {}).get(nome, [])
     milhas = sum(reserva.get("milhas", 0) for reserva in reservas)
-    return render_template('passageiro/dashboard.html', usuario=usuario, milhas=milhas, reservas=reservas)
+    return render_template('passageiro/dashboard.html', nome=nome, milhas=milhas, reservas=reservas)
 
 @passageiro_bp.route('/consultar_voos')
 @login_required_passageiro
