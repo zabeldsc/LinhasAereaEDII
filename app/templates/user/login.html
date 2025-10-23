@@ -1,6 +1,6 @@
-{% extends "passageiro/base_passageiro.html" %}
+{% extends "user/base_user.html" %}
 
-{% block title %}Login{% endblock %}
+{% block title %}Login do Passageiro{% endblock %}
 
 {% block content %}
   <div class="row justify-content-center">
@@ -13,7 +13,7 @@
           <div class="alert alert-danger text-center">{{ erro }}</div>
         {% endif %}
 
-        <form action="/admin/login" method="POST">
+        <form action="/user/login" method="POST">
           <div class="mb-3">
             <label for="usuario" class="form-label">Usuário:</label>
             <input type="text" id="usuario" name="usuario" class="form-control" required>

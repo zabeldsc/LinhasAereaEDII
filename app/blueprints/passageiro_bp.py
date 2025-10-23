@@ -1,29 +1,26 @@
-from flask import Blueprint, redirect, render_template, current_app, request, url_for
+from flask import Blueprint, redirect, render_template, current_app, session
+from app.blueprints.user_bp import login_required_passageiro
 
 passageiro_bp = Blueprint('passageiro', __name__, url_prefix='/passageiro')
 
-@passageiro_bp.route('/')
-def pagina_inicial():
+@passageiro_bp.route('/dashboard')
+@login_required_passageiro
+def dashboard():
+    usuario = session['usuario']
     voos = current_app.config.get('VOOS', {})
-    return render_template('passageiro/pagina_inicial.html', voos=voos)
+    reservas = current_app.config.get('RESERVAS', {}).get(usuario, [])
+    milhas = sum(reserva.get("milhas", 0) for reserva in reservas)
+    return render_template('passageiro/dashboard.html', usuario=usuario, milhas=milhas, reservas=reservas)
 
-# Rota de login do passageiro
-@passageiro_bp.route('/login', methods=['GET', 'POST'])
-def login():
-    erro = None
-    if request.method == 'POST':
-        # Pega os dados de usuários do passageiro (USER_KEYS do app)
-        user_keys = current_app.config.get('USER_KEYS', {})
-        user = request.form['usuario']
-        pw = request.form['senha']
+@passageiro_bp.route('/consultar_voos')
+@login_required_passageiro
+def consultar_voos():
+    voos = current_app.config.get('VOOS', {})
+    return render_template('passageiro/consultar_voos.html', voos=voos)
 
-        if user not in user_keys:
-            erro = "Usuário não encontrado"
-        elif pw != user_keys[user]["senha"]:
-            erro = "Senha incorreta"
-        else:
-            # Login bem-sucedido: redireciona para a página de reservas/compras
-            return redirect(url_for('passageiro.reservas'))
-
-    # Renderiza o template de login, passando qualquer erro
-    return render_template('passageiro/login.html', erro=erro)
+@passageiro_bp.route('/simular_conexoes')
+@login_required_passageiro
+def simular_conexoes():
+    voos = current_app.config.get('VOOS', {})
+    # Aqui você poderia chamar sua função de grafo para simular conexões
+    return render_template('passageiro/simular_conexoes.html', voos=voos)

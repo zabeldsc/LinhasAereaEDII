@@ -1,6 +1,7 @@
 from flask import Flask, redirect
 from .blueprints.admin_bp import admin_bp
 from .blueprints.passageiro_bp import passageiro_bp
+from .blueprints.user_bp import user_bp
 from . import data
 from datetime import datetime
 import os
@@ -14,6 +15,7 @@ def create_app():
     # Registrar blueprints
     app.register_blueprint(admin_bp, url_prefix="/admin")
     app.register_blueprint(passageiro_bp, url_prefix="/passageiro")
+    app.register_blueprint(user_bp, url_prefix="/user")
 
     # Context processor
     @app.context_processor
@@ -27,6 +29,6 @@ def create_app():
     # Rota raiz
     @app.route('/')
     def raiz():
-        return redirect("/passageiro/")
+        return redirect("/user/")
 
     return app
