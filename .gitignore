@@ -22,7 +22,7 @@ instance/
 .vscode/
 
 # JSONs de dados sensíveis
-flaskr/user_keys.json
+flaskr/adm_keys.json
 flaskr/voos.json
 
 # Mac / Linux

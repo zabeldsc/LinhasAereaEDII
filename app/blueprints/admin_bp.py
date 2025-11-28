@@ -33,8 +33,8 @@ def add_voos():
             "tipo_aeronave": request.form["tipo_aeronave"],
             "num_assentos": request.form["num_assentos"]
         }
-        current_app.config['VOOS'] = voos  # Atualiza o config
-        data.save_voos(voos)  # Salva no JSON
+        current_app.config['VOOS'] = voos
+        data.save_voos(voos)
         return redirect(url_for('admin.pagina_voos'))
 
     return render_template('admin/voos_add.html')
