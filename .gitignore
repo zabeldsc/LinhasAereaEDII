@@ -1,0 +1,35 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.sqlite3
+
+# Virtual environments
+venv/
+env/
+ENV/
+.venv/
+
+# Flask / general
+instance/
+*.log
+*.pot
+*.mo
+
+# PyCharm / VSCode
+.idea/
+.vscode/
+
+# JSONs de dados sensíveis
+flaskr/user_keys.json
+flaskr/voos.json
+
+# Mac / Linux
+.DS_Store
+*.swp
+
+# Byte-compiled / distribution
+*.egg-info/
+dist/
+build/

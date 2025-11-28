@@ -1,0 +1,37 @@
+{% extends "admin/base_admin.html" %}
+
+{% block title %}Lista de Voos{% endblock %}
+
+{% block content %}
+<h1 class="mb-4">Lista de Voos</h1>
+
+<a href="{{ url_for('admin.add_voos') }}" class="btn btn-primary mb-3">Adicionar Voo</a>
+
+{% if voos %}
+    <div class="row">
+        {% for id, voo in voos.items() %}
+        <div class="col-md-4">
+            <div class="card mb-4 shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">{{ voo.codigo }}</h5>
+                    <p class="card-text">
+                        <strong>Origem:</strong> {{ voo.origem }}<br>
+                        <strong>Destino:</strong> {{ voo.destino }}<br>
+                        <strong>Milhas:</strong> {{ voo.milhas }}<br>
+                        <strong>Preço:</strong> R$ {{ voo.preco_passagem }}<br>
+                        <strong>Aeronave:</strong> {{ voo.tipo_aeronave }}<br>
+                        <strong>Assentos:</strong> {{ voo.num_assentos }}
+                    </p>
+                    <div class="d-flex justify-content-between">
+                        <a href="{{ url_for('admin.edit_voo', voo_id=id) }}" class="btn btn-warning btn-sm">Editar</a>
+                        <a href="{{ url_for('admin.delete_voo', voo_id=id) }}" class="btn btn-danger btn-sm">Excluir</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+{% else %}
+    <div class="alert alert-info">Nenhum voo listado.</div>
+{% endif %}
+{% endblock %}

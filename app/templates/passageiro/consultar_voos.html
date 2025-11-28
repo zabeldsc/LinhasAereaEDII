@@ -1,0 +1,54 @@
+{% extends "passageiro/base_passageiro.html" %}
+
+{% block title %}Consultar Voos{% endblock %}
+
+{% block content %}
+<h2 class="mb-4">Consultar Voos</h2>
+
+<!-- Formulário de filtro -->
+<form method="GET" class="row g-3 mb-4">
+    <div class="col-md-5">
+        <input type="text" name="origem" class="form-control" placeholder="Origem" value="{{ filtro_origem }}">
+    </div>
+    <div class="col-md-5">
+        <input type="text" name="destino" class="form-control" placeholder="Destino" value="{{ filtro_destino }}">
+    </div>
+    <div class="col-md-2">
+        <button type="submit" class="btn btn-primary w-100">Filtrar</button>
+    </div>
+</form>
+
+<!-- Tabela de voos -->
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Código</th>
+            <th>Origem</th>
+            <th>Destino</th>
+            <th>Milhas</th>
+            <th>Preço</th>
+            <th>Aeronave</th>
+            <th>Assentos</th>
+            <th>Ação</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for id, voo in voos.items() %}
+        <tr>
+            <td>{{ voo.codigo }}</td>
+            <td>{{ voo.origem }}</td>
+            <td>{{ voo.destino }}</td>
+            <td>{{ voo.milhas }}</td>
+            <td>R$ {{ voo.preco_passagem }}</td>
+            <td>{{ voo.tipo_aeronave }}</td>
+            <td>{{ voo.num_assentos }}</td>
+            <td>
+                <a href="{{ url_for('passageiro.dashboard', voo_id=id) }}" class="btn btn-sm btn-success">
+                    Reservar
+                </a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
