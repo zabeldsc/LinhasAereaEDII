@@ -43,7 +43,7 @@
             <td>{{ voo.tipo_aeronave }}</td>
             <td>{{ voo.num_assentos }}</td>
             <td>
-                <a href="{{ url_for('passageiro.dashboard', voo_id=id) }}" class="btn btn-sm btn-success">
+                <a href="{{ url_for('passageiro.reservar', voo_id=id) }}" class="btn btn-sm btn-success">
                     Reservar
                 </a>
             </td>

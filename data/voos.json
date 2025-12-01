@@ -6,7 +6,7 @@
         "milhas": "300",
         "preco_passagem": "250.50",
         "tipo_aeronave": "Boeing 737",
-        "num_assentos": "180"
+        "num_assentos": 178
     },
     "2": {
         "codigo": "VOO102",
