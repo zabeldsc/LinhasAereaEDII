@@ -69,8 +69,6 @@ def reservar(voo_id):
                 "cpf_passageiro": cpf_passageiro,
                 "usuario": usuario
             }
-            current_app.config['RESERVAS'] = reservas
-            data.save_reservas(reservas)
             
             #Decrescento assentos apos reserva e atualizo o dicionario de voos
             voo['num_assentos'] = assentos -1
@@ -78,6 +76,29 @@ def reservar(voo_id):
             current_app.config['VOOS'] = voos
             data.save_voos(voos)
             
+            clientes = current_app.config.get('RESERVAS', {})
+            nome_usuario = session['nome']
+            milhas_voo = int(voo['milhas'])
+            
+            if cpf_passageiro in clientes:
+                cliente = clientes[cpf_passageiro]
+                cliente['milhas'] += milhas_voo
+                cliente['reservas'].append(reserva)
+            else:
+                cliente = {
+                    "cpf": cpf_passageiro,
+                    "nome": nome_usuario,
+                    "milhas": milhas_voo,
+                    "reservas": [reserva]
+                }
+                clientes[cpf_passageiro] = cliente
+                
+            current_app.config['CLIENTES'] = clientes
+            data.save_clientes(clientes)
+            
+            current_app.config['RESERVAS'] = reservas
+            data.save_reservas(reservas)
+                
             flash('Reserva feita com sucesso!', 'sucess')
             return redirect(url_for('passageiro.dashboard'))
         

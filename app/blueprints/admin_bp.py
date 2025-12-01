@@ -12,6 +12,11 @@ def pagina_voos():
     voos = current_app.config.get('VOOS', {})
     return render_template('admin/voos.html', voos=voos)
 
+@admin_bp.route('/clientes')
+@login_required_admin
+def pagina_clientes():
+    clientes = current_app.config.get('CLIENTES', {})
+    return render_template('admin/clientes.html', clientes=clientes)
 
 @admin_bp.route('/voos/add', methods=['GET', 'POST'])
 @login_required_admin

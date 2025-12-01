@@ -1,0 +1,34 @@
+{% extends "admin/base_admin.html" %}
+
+{% block title %}Gestão de Clientes{% endblock %}
+
+{% block content %}
+<h1 class="mb-4">Base de Clientes</h1>
+
+<form class="mb-4 d-flex">
+    <input type="text" class="form-control me-2" placeholder="Buscar por CPF (Ex: 123.456.789-00)">
+    <button class="btn btn-primary" type="button">Buscar</button>
+</form>
+
+<div class="row">
+    {% for cpf, cliente in clientes.items() %}
+    <div class="col-md-4 mb-3">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">{{ cliente.nome }}</h5>
+                <h6 class="card-subtitle mb-2 text-muted">CPF: {{ cliente.cpf }}</h6>
+                <p class="card-text">
+                    <strong>Milhas Acumuladas:</strong> {{ cliente.milhas }}<br>
+                    <strong>Total de Viagens:</strong> {{ cliente.reservas|length }}
+                </p>
+            </div>
+            <div class="card-footer bg-transparent">
+                <small class="text-muted">Última atualização: Hoje</small>
+            </div>
+        </div>
+    </div>
+    {% else %}
+    <div class="alert alert-info">Nenhum cliente registrado ainda.</div>
+    {% endfor %}
+</div>
+{% endblock %}

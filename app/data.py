@@ -5,6 +5,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 VOOS_FILE = BASE_DIR / "data" / "voos.json"
 USER_KEYS_FILE = BASE_DIR / "data" / "user_keys.json"
 RESERVAS_FILE = BASE_DIR / "data" / "reservas.json"
+CLIENTES_FILE = BASE_DIR / "data" / "clientes.json"
 
 def load_voos():
     if VOOS_FILE.exists():
@@ -37,3 +38,13 @@ def save_reservas(reservas):
     RESERVAS_FILE.parent.mkdir(parents=True, exist_ok=True)
     with RESERVAS_FILE.open("w", encoding="utf-8") as f:
         json.dump(reservas, f, ensure_ascii=False, indent=4)
+        
+def load_clientes():
+    if CLIENTES_FILE.exists():
+        with CLIENTES_FILE.open("r", encoding="utf-8") as f:
+            return json.load(f)
+
+def save_clientes(clientes):
+    CLIENTES_FILE.parent.mkdir(parents=True, exist_ok=True)
+    with CLIENTES_FILE.open("w", encoding="utf-8") as f:
+        json.dump(clientes, f, ensure_ascii=False, indent=4)

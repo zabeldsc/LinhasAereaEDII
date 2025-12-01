@@ -26,6 +26,7 @@ def create_app():
     app.config['VOOS'] = data.load_voos()
     app.config['USER_KEYS'] = data.load_user_keys()
     app.config['RESERVAS'] = data.load_reservas()
+    app.config['CLIENTES'] = data.load_clientes()
 
     # Rota raiz
     @app.route('/')
