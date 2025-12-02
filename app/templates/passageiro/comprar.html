@@ -19,13 +19,8 @@
                 <hr>
                 
                 <form method="POST">
-                    <div class="mb-3">
-                        <label for="cpf" class="form-label">Digite seu CPF para confirmar:</label>
-                        <input type="text" name="cpf" id="cpf" class="form-control" required placeholder="000.000.000-00">
-                    </div>
-
                     <div class="d-grid gap-2">
-                        <button type="submit" class="btn btn-success btn-lg">Confirmar Compra</button>
+                        <button type="submit" class="btn btn-success btn-lg">Confirmar Reserva</button>
                         <a href="{{ url_for('passageiro.consultar_voos') }}" class="btn btn-secondary">Cancelar</a>
                     </div>
                 </form>

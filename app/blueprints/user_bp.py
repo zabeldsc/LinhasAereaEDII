@@ -88,6 +88,7 @@ def cadastro():
         nome = request.form.get('nome')
         email = request.form.get('email')
         senha = request.form.get('senha')
+        cpf = request.form.get('cpf')
 
         adm_keys = current_app.config.get('ADM_KEYS', {})
         if email in adm_keys:
@@ -101,18 +102,21 @@ def cadastro():
             return redirect(url_for('user.cadastro'))
 
         clientes.append({
-            "cpf": "",
+            "cpf": cpf,
             "nome": nome,
             "email": email,
             "senha": senha,
-            "codigo_reserva": "",
-            "data_viagem": "",
             "milhas": "0",
+            "reservas": []
         })
 
         data.save_clientes(clientes)
 
+        session['usuario'] = email
+        session['nome'] = nome
+        session['tipo'] = 'passageiro'
+
         flash("Cadastro realizado com sucesso!", "success")
-        return redirect(url_for('user.login'))
+        return redirect(url_for('passageiro.dashboard'))
 
     return render_template('user/cadastro.html')

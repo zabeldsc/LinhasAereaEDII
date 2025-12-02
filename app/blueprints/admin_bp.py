@@ -116,3 +116,16 @@ def edit_voo(voo_id):
         return redirect(url_for('admin.pagina_voos'))
 
     return render_template('admin/voo_edit.html', voo=voo, voo_id=voo_id)
+
+@admin_bp.route('/reservas')
+@login_required_admin
+def pagina_reservas():
+    reservas_dict = current_app.config.get('RESERVAS', {})
+
+    # Converte o dict em lista, incluindo o ID como campo
+    reservas = []
+    for reserva_id, dados in reservas_dict.items():
+        dados['id'] = reserva_id  # adiciona o ID da reserva ao dict
+        reservas.append(dados)
+
+    return render_template("admin/reservas.html", reservas=reservas)

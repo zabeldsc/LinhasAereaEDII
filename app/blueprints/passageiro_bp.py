@@ -37,89 +37,76 @@ def consultar_voos():
 @passageiro_bp.route('/consultar_voos/reservar/<voo_id>', methods=['GET', 'POST'])
 @login_required_passageiro
 def reservar(voo_id):
-    voos = current_app.config.get('VOOS', {})
+    # Sempre recarrega voos atualizados
+    voos = data.load_voos()
     voo = voos.get(voo_id)
-    
-    if not voo:
-        flash('Voo não encontrado!', 'danger')
-        return redirect(url_for('passageiro.consultar_voos'))
-    
-    if request.method == "POST":
-        assentos = int(voo.get('num_assentos', 0))
-        
-        if assentos > 0:    
-            
-            reservas = current_app.config.get('RESERVAS', {})
-            clientes = current_app.config.get('CLIENTES', []) 
-            
-            reserva_id = str(int(time.time()))
-            cpf_form = request.form.get('cpf', '')
-            usuario_email = session['usuario'] # Email da sessão
-            
-            cliente_atual = None
-            
-            for c in clientes:
-                if c.get('email') == usuario_email:
-                    cliente_atual = c
-                    break
-            
-            if not cliente_atual:
-                flash('Erro: Usuário não encontrado na base de dados.', 'danger')
-                return redirect(url_for('user.logout')) # Força logout se der erro grave
-            
-            # Cria a reserva
-            reservas[reserva_id] = {
-                "voo_id": voo_id,
-                "codigo": voo["codigo"],
-                "origem": voo["origem"],
-                "destino": voo["destino"],
-                "milhas": voo["milhas"],
-                "preco": voo["preco_passagem"],
-                "aeronave": voo["tipo_aeronave"],
-                "data_compra": time.strftime('%d-%m-%Y'),
-                "cpf_passageiro": cpf_form,
-                "usuario": usuario_email
-            }
-            
-            # Atualiza o Cliente encontrado (Isso atualiza dentro da lista 'clientes' automaticamente)
-            cliente_atual['cpf'] = cpf_form # Salva o CPF novo no cliente
-            
-            # Tratamento seguro para milhas
-            milhas_str = cliente_atual.get('milhas')
-            if not milhas_str: 
-                milhas_str = 0
-            cliente_atual['milhas'] = int(milhas_str) + int(voo['milhas'])
-            
-            # Tratamento da lista de reservas
-            lista_reservas = cliente_atual.get('reservas', [])
-            if isinstance(lista_reservas, str) or not isinstance(lista_reservas, list): 
-                # Se vier como string "[]" do CSV, converte ou limpa
-                lista_reservas = []
-            
-            lista_reservas.append(reserva_id)
-            cliente_atual['reservas'] = lista_reservas
-            
-            # 3. Atualiza Voo
-            voo['num_assentos'] = assentos - 1
-            voos[voo_id] = voo
-            
-            # 4. Salva Tudo
-            current_app.config['VOOS'] = voos
-            current_app.config['RESERVAS'] = reservas
-            current_app.config['CLIENTES'] = clientes 
-            
-            data.save_voos(voos)            
-            data.save_reservas(reservas)
-            data.save_clientes(clientes) # Salva a lista inteira novamente
-            
-            flash('Reserva feita com sucesso!', 'success') # Corrigido typo 'sucess'
-            return redirect(url_for('passageiro.dashboard'))
-        
-        else:
-            flash('Assentos esgotados!', 'danger')
-            return redirect(url_for('passageiro.consultar_voos'))
 
-    return render_template('passageiro/comprar.html', voo=voo, voo_id=voo_id)
+    if not voo:
+        flash("Voo não encontrado!", "danger")
+        return redirect(url_for("passageiro.consultar_voos"))
+
+    if request.method == "POST":
+        assentos = int(voo.get("num_assentos", 0))
+        if assentos <= 0:
+            flash("Assentos esgotados!", "danger")
+            return redirect(url_for("passageiro.consultar_voos"))
+
+        # Carregar sempre a base atualizada
+        clientes = data.load_clientes()
+        reservas = data.load_reservas()
+
+        usuario_email = session['usuario']
+
+        # Encontrar cliente atual
+        cliente = next((c for c in clientes if c["email"] == usuario_email), None)
+        if not cliente:
+            flash("Erro: cliente não encontrado.", "danger")
+            return redirect(url_for("passageiro.dashboard"))
+
+        cpf_passageiro = cliente.get("cpf")
+
+        # Criar ID único da reserva
+        reserva_id = str(int(time.time()))
+
+        # Nova reserva
+        reservas[reserva_id] = {
+            "voo_id": voo_id,
+            "codigo": voo["codigo"],
+            "origem": voo["origem"],
+            "destino": voo["destino"],
+            "milhas": voo["milhas"],
+            "preco": voo["preco_passagem"],
+            "aeronave": voo["tipo_aeronave"],
+            "data_compra": time.strftime('%d-%m-%Y'),
+            "cpf_passageiro": cpf_passageiro,
+            "usuario": usuario_email
+        }
+
+        # Atualizar milhas
+        cliente["milhas"] = int(cliente.get("milhas", 0)) + int(voo["milhas"])
+
+        # Garantir lista de reservas válida
+        if not isinstance(cliente.get("reservas"), list):
+            cliente["reservas"] = []
+        cliente["reservas"].append(reserva_id)
+
+        # Decrementar assentos
+        voo["num_assentos"] = assentos - 1
+
+        # Salvamentos
+        data.save_voos(voos)
+        data.save_reservas(reservas)
+        data.save_clientes(clientes)
+
+        # Sincronizar opcionalmente o config (não obrigatório mais)
+        current_app.config["VOOS"] = voos
+        current_app.config["RESERVAS"] = reservas
+        current_app.config["CLIENTES"] = clientes
+
+        flash("Reserva realizada com sucesso!", "success")
+        return redirect(url_for("passageiro.dashboard"))
+
+    return render_template("passageiro/comprar.html", voo=voo, voo_id=voo_id)
 
 @passageiro_bp.route('/simular_conexoes')
 @login_required_passageiro
