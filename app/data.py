@@ -56,7 +56,7 @@ def load_clientes():
             clientes.append(row)
     return clientes
 
-FIELDNAMES_CLIENTES = ["cpf", "nome", "email", "senha", "codigo_reserva", "data_viagem", "milhas"]
+FIELDNAMES_CLIENTES = ["cpf", "nome", "email", "senha", "codigo_reserva", "data_viagem", "milhas", "reservas"]
 
 def save_clientes(clientes):
     CLIENTES_FILE.parent.mkdir(parents=True, exist_ok=True)
