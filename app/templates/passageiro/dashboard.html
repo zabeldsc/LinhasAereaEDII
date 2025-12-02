@@ -47,20 +47,24 @@
                     <thead>
                         <tr>
                             <th>Código Reserva</th>
-                            <th>Voo</th>
                             <th>Origem</th>
                             <th>Destino</th>
-                            <th>Data</th>
+                            <th>Milhas</th>
+                            <th>preco</th>
+                            <th>Aeronave</th>
+                            <th>Data de Compra</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {% for reserva in reservas %}
+                        {% for rid, reserva in reservas.items() %}
                             <tr>
-                                <td>{{ reserva.codigo }}</td>
-                                <td>{{ reserva.voo }}</td>
+                                <td>{{ rid }}</td>
                                 <td>{{ reserva.origem }}</td>
                                 <td>{{ reserva.destino }}</td>
-                                <td>{{ reserva.data }}</td>
+                                <td>{{ reserva.milhas }}</td>
+                                <td>R$ {{ reserva.preco }}</td>
+                                <td>{{ reserva.aeronave }}</td>
+                                <td>{{ reserva.data_compra }}</td>
                             </tr>
                         {% endfor %}
                     </tbody>

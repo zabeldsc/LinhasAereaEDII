@@ -8,6 +8,7 @@ DATA_DIR = BASE_DIR / "data"
 VOOS_FILE = DATA_DIR / "voos.json"
 ADM_KEYS_FILE = DATA_DIR / "adm_keys.json"
 CLIENTES_FILE = DATA_DIR / "clientes.csv"
+RESERVAS_FILE = DATA_DIR / "reservas.json"
 
 # ----------------------------
 # JSON HELPERS
@@ -39,6 +40,12 @@ def load_adm_keys():
 
 def save_adm_keys(adm_keys):
     save_json(ADM_KEYS_FILE, adm_keys)
+    
+def load_reservas():
+    return load_json(RESERVAS_FILE)
+
+def save_reservas(reservas):
+    save_json(RESERVAS_FILE)
 
 # ----------------------------
 # CSV HELPERS (Clientes)
@@ -55,7 +62,7 @@ def load_clientes():
             clientes.append(row)
     return clientes
 
-FIELDNAMES_CLIENTES = ["cpf", "nome", "email", "senha", "codigo_reserva", "data_viagem", "milhas"]
+FIELDNAMES_CLIENTES = ["cpf", "nome", "email", "senha", "codigo_reserva", "data_viagem", "milhas", "reservas"]
 
 def save_clientes(clientes):
     CLIENTES_FILE.parent.mkdir(parents=True, exist_ok=True)

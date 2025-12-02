@@ -1,0 +1,50 @@
+{
+    "1764665886": {
+        "voo_id": "1",
+        "codigo": "VOO101",
+        "origem": "São Paulo",
+        "destino": "Rio de Janeiro",
+        "milhas": "300",
+        "preco": "250.5",
+        "aeronave": "Boeing 737",
+        "data_compra": "02-12-2025",
+        "cpf_passageiro": "555.555.555-55",
+        "usuario": "antonio@example.com"
+    },
+    "1764665902": {
+        "voo_id": "2",
+        "codigo": "VOO102",
+        "origem": "Brasília",
+        "destino": "Salvador",
+        "milhas": "1200",
+        "preco": "550.00",
+        "aeronave": "Airbus A320",
+        "data_compra": "02-12-2025",
+        "cpf_passageiro": "555.555.555-55",
+        "usuario": "antonio@example.com"
+    },
+    "1764667759": {
+        "voo_id": "1",
+        "codigo": "VOO101",
+        "origem": "São Paulo",
+        "destino": "Rio de Janeiro",
+        "milhas": "300",
+        "preco": "250.5",
+        "aeronave": "Boeing 737",
+        "data_compra": "02-12-2025",
+        "cpf_passageiro": "777.777.777-77",
+        "usuario": "romario@example.com"
+    },
+    "1764667771": {
+        "voo_id": "2",
+        "codigo": "VOO102",
+        "origem": "Brasília",
+        "destino": "Salvador",
+        "milhas": "1200",
+        "preco": "550.00",
+        "aeronave": "Airbus A320",
+        "data_compra": "02-12-2025",
+        "cpf_passageiro": "777.777.777-77",
+        "usuario": "romario@example.com"
+    }
+}

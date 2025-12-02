@@ -1,0 +1,36 @@
+{% extends "passageiro/base_passageiro.html" %}
+
+{% block title %}Confirmar Compra{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card shadow-sm">
+            <div class="card-header bg-primary text-white">
+                <h4 class="mb-0">Confirmar Reserva</h4>
+            </div>
+            <div class="card-body">
+                <h5 class="card-title">Resumo do Voo: {{ voo.codigo }}</h5>
+                <p><strong>Origem:</strong> {{ voo.origem }}</p>
+                <p><strong>Destino:</strong> {{ voo.destino }}</p>
+                <p><strong>Preço:</strong> R$ {{ voo.preco_passagem }}</p>
+                <p><strong>Aeronave:</strong> {{ voo.tipo_aeronave }}</p>
+                
+                <hr>
+                
+                <form method="POST">
+                    <div class="mb-3">
+                        <label for="cpf" class="form-label">Digite seu CPF para confirmar:</label>
+                        <input type="text" name="cpf" id="cpf" class="form-control" required placeholder="000.000.000-00">
+                    </div>
+
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-success btn-lg">Confirmar Compra</button>
+                        <a href="{{ url_for('passageiro.consultar_voos') }}" class="btn btn-secondary">Cancelar</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
