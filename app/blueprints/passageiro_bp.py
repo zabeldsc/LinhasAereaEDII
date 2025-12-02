@@ -15,8 +15,6 @@ def dashboard():
         rid: r for rid, r in reservas.items()
         if r.get("usuario") == usuario
     }
-    print("User atual:", session.get('usuario'))
-    print("User reserva:", reservas_user)
     milhas = sum(int(reserva.get("milhas", 0)) for reserva in reservas_user.values())
     return render_template('passageiro/dashboard.html', nome=nome, milhas=milhas, reservas=reservas_user)
 
@@ -35,7 +33,7 @@ def consultar_voos():
 
     return render_template('passageiro/consultar_voos.html', voos=voos_filtrados,
                            filtro_origem=filtro_origem, filtro_destino=filtro_destino)
-
+    
 @passageiro_bp.route('/consultar_voos/reservar/<voo_id>', methods=['GET', 'POST'])
 @login_required_passageiro
 def reservar(voo_id):
@@ -43,7 +41,7 @@ def reservar(voo_id):
     voo = voos.get(voo_id)
     
     if not voo:
-        flash('Voo nao encontrado!', 'danger')
+        flash('Voo não encontrado!', 'danger')
         return redirect(url_for('passageiro.consultar_voos'))
     
     if request.method == "POST":
@@ -52,12 +50,25 @@ def reservar(voo_id):
         if assentos > 0:    
             
             reservas = current_app.config.get('RESERVAS', {})
-            reserva = str(int(time.time()))
+            clientes = current_app.config.get('CLIENTES', []) 
             
-            #Passageiro confirma com cpf para ser a chave da gestao de clientes
-            cpf_passageiro = request.form.get('cpf', '')
-            usuario = session['usuario']
-            reservas[reserva] = {
+            reserva_id = str(int(time.time()))
+            cpf_form = request.form.get('cpf', '')
+            usuario_email = session['usuario'] # Email da sessão
+            
+            cliente_atual = None
+            
+            for c in clientes:
+                if c.get('email') == usuario_email:
+                    cliente_atual = c
+                    break
+            
+            if not cliente_atual:
+                flash('Erro: Usuário não encontrado na base de dados.', 'danger')
+                return redirect(url_for('user.logout')) # Força logout se der erro grave
+            
+            # Cria a reserva
+            reservas[reserva_id] = {
                 "voo_id": voo_id,
                 "codigo": voo["codigo"],
                 "origem": voo["origem"],
@@ -66,40 +77,42 @@ def reservar(voo_id):
                 "preco": voo["preco_passagem"],
                 "aeronave": voo["tipo_aeronave"],
                 "data_compra": time.strftime('%d-%m-%Y'),
-                "cpf_passageiro": cpf_passageiro,
-                "usuario": usuario
+                "cpf_passageiro": cpf_form,
+                "usuario": usuario_email
             }
             
-            #Decrescento assentos apos reserva e atualizo o dicionario de voos
-            voo['num_assentos'] = assentos -1
+            # Atualiza o Cliente encontrado (Isso atualiza dentro da lista 'clientes' automaticamente)
+            cliente_atual['cpf'] = cpf_form # Salva o CPF novo no cliente
+            
+            # Tratamento seguro para milhas
+            milhas_str = cliente_atual.get('milhas')
+            if not milhas_str: 
+                milhas_str = 0
+            cliente_atual['milhas'] = int(milhas_str) + int(voo['milhas'])
+            
+            # Tratamento da lista de reservas
+            lista_reservas = cliente_atual.get('reservas', [])
+            if isinstance(lista_reservas, str) or not isinstance(lista_reservas, list): 
+                # Se vier como string "[]" do CSV, converte ou limpa
+                lista_reservas = []
+            
+            lista_reservas.append(reserva_id)
+            cliente_atual['reservas'] = lista_reservas
+            
+            # 3. Atualiza Voo
+            voo['num_assentos'] = assentos - 1
             voos[voo_id] = voo
+            
+            # 4. Salva Tudo
             current_app.config['VOOS'] = voos
-            data.save_voos(voos)
-            
-            clientes = current_app.config.get('RESERVAS', {})
-            nome_usuario = session['nome']
-            milhas_voo = int(voo['milhas'])
-            
-            if cpf_passageiro in clientes:
-                cliente = clientes[cpf_passageiro]
-                cliente['milhas'] += milhas_voo
-                cliente['reservas'].append(reserva)
-            else:
-                cliente = {
-                    "cpf": cpf_passageiro,
-                    "nome": nome_usuario,
-                    "milhas": milhas_voo,
-                    "reservas": [reserva]
-                }
-                clientes[cpf_passageiro] = cliente
-                
-            current_app.config['CLIENTES'] = clientes
-            data.save_clientes(clientes)
-            
             current_app.config['RESERVAS'] = reservas
+            current_app.config['CLIENTES'] = clientes 
+            
+            data.save_voos(voos)            
             data.save_reservas(reservas)
-                
-            flash('Reserva feita com sucesso!', 'sucess')
+            data.save_clientes(clientes) # Salva a lista inteira novamente
+            
+            flash('Reserva feita com sucesso!', 'success') # Corrigido typo 'sucess'
             return redirect(url_for('passageiro.dashboard'))
         
         else:
