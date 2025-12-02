@@ -24,10 +24,15 @@ def create_app():
 
     # Carregar dados
     app.config['VOOS'] = data.load_voos()
-    app.config['USER_KEYS'] = data.load_user_keys()
+    app.config['ADM_KEYS'] = data.load_adm_keys()
     app.config['RESERVAS'] = data.load_reservas()
-    app.config['CLIENTES'] = data.load_clientes()
-
+    
+    clientes_raw = data.load_clientes()
+    if isinstance(clientes_raw, dict):
+        app.config['CLIENTES'] = list(clientes_raw.values())
+    else:
+        # Se já for lista, atribui direto
+        app.config['CLIENTES'] = clientes_raw
     # Rota raiz
     @app.route('/')
     def raiz():
