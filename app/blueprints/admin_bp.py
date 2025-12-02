@@ -1,8 +1,10 @@
 from functools import wraps
-from flask import Blueprint, render_template, request, redirect, url_for, current_app, session
+from flask import Blueprint, render_template, request, redirect, url_for, current_app, session, flash
 import time
 from app import data
 from app.blueprints.user_bp import login_required_admin
+from app.search_structures.arvoreB import ArvoreB
+import ast
 
 admin_bp = Blueprint('admin', __name__, url_prefix='/admin')
 
@@ -12,11 +14,51 @@ def pagina_voos():
     voos = current_app.config.get('VOOS', {})
     return render_template('admin/voos.html', voos=voos)
 
-@admin_bp.route('/clientes')
+@admin_bp.route('/clientes', methods=['GET', 'POST'])
 @login_required_admin
 def pagina_clientes():
-    clientes = current_app.config.get('CLIENTES', {})
-    return render_template('admin/clientes.html', clientes=clientes)
+    lista_clientes = current_app.config.get('CLIENTES', [])
+    for cliente in lista_clientes:
+        reservas = cliente.get('reservas')
+        
+        # Se for string (ex: "['123', '456']"), converte para lista real
+        if isinstance(reservas, str):
+            try:
+                # ast.literal_eval converte a string com formato de lista para lista Python
+                # Se a string for vazia ou "[]", vira uma lista vazia []
+                if not reservas or reservas == "":
+                    cliente['reservas'] = []
+                else:
+                    cliente['reservas'] = ast.literal_eval(reservas)
+            except (ValueError, SyntaxError):
+                # Se der erro na conversão, assume lista vazia para não quebrar o site
+                cliente['reservas'] = []
+        
+        # Se for None, vira lista vazia
+        elif reservas is None:
+            cliente['reservas'] = []
+            
+    cpf_busca = request.args.get('buscar_cpf') or request.form.get('buscar_cpf')    
+    clientes_para_exibir = lista_clientes
+    
+    if cpf_busca:
+        arvore = ArvoreB(t=3)
+        
+        for cliente in lista_clientes:
+            cpf = cliente.get('cpf')
+            if cpf: 
+                arvore.inserir(cpf, cliente)
+
+        resultado = arvore.buscar(cpf_busca)
+        
+        if resultado:
+            clientes_para_exibir = [resultado] # Coloca em lista para o template iterar
+            flash(f'Cliente encontrado: {resultado.get("nome")}', 'success')
+        else:
+            clientes_para_exibir = [] # Lista vazia se não achar
+            flash('CPF não encontrado.', 'warning')
+
+    return render_template('admin/clientes.html', clientes=clientes_para_exibir)
 
 @admin_bp.route('/voos/add', methods=['GET', 'POST'])
 @login_required_admin
