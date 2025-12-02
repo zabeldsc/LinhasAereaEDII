@@ -24,7 +24,8 @@ def create_app():
 
     # Carregar dados
     app.config['VOOS'] = data.load_voos()
-    app.config['USER_KEYS'] = data.load_user_keys()
+    app.config['ADM_KEYS'] = data.load_adm_keys()
+    app.config['CLIENTES_KEYS'] = data.load_clientes()
 
     # Rota raiz
     @app.route('/')
