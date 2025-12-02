@@ -40,6 +40,12 @@ def load_adm_keys():
 
 def save_adm_keys(adm_keys):
     save_json(ADM_KEYS_FILE, adm_keys)
+    
+def load_reservas():
+    return load_json(RESERVAS_FILE)
+
+def save_reservas(reservas):
+    save_json(RESERVAS_FILE)
 
 # ----------------------------
 # CSV HELPERS (Clientes)
