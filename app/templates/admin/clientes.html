@@ -5,30 +5,46 @@
 {% block content %}
 <h1 class="mb-4">Gestão de Clientes</h1>
 
-<form class="mb-4 d-flex">
-    <input type="text" class="form-control me-2" placeholder="Buscar por CPF (Ex: 123.456.789-00)">
-    <button class="btn btn-primary" type="button">Buscar</button>
+<form class="mb-4 d-flex" method="GET" action="{{ url_for('admin.pagina_clientes') }}">
+    <input type="text" name="buscar_cpf" class="form-control me-2" 
+           placeholder="Buscar por CPF (Ex: 123.456.789-00)" 
+           value="{{ request.args.get('buscar_cpf', '') }}">
+    
+    <button class="btn btn-primary me-2" type="submit">Buscar</button>
+    
+    {% if request.args.get('buscar_cpf') %}
+        <a href="{{ url_for('admin.pagina_clientes') }}" class="btn btn-secondary">Limpar</a>
+    {% endif %}
 </form>
 
 <div class="row">
-    {% for cpf, cliente in clientes.items() %}
+    {% for cliente in clientes %}
     <div class="col-md-4 mb-3">
         <div class="card h-100">
             <div class="card-body">
                 <h5 class="card-title">{{ cliente.nome }}</h5>
                 <h6 class="card-subtitle mb-2 text-muted">CPF: {{ cliente.cpf }}</h6>
                 <p class="card-text">
+                    <strong>Email:</strong> {{ cliente.email }}<br>
                     <strong>Milhas Acumuladas:</strong> {{ cliente.milhas }}<br>
-                    <strong>Total de Viagens:</strong> {{ cliente.reservas|length }}
+                    
+                    <strong>Total de Viagens:</strong> 
+                    {% if cliente.reservas is iterable and cliente.reservas is not string %}
+                        {{ cliente.reservas|length }}
+                    {% else %}
+                        0
+                    {% endif %}
                 </p>
             </div>
             <div class="card-footer bg-transparent">
-                <small class="text-muted">Última atualização: Hoje</small>
+                <small class="text-muted">Status: Ativo</small>
             </div>
         </div>
     </div>
     {% else %}
-    <div class="alert alert-info">Nenhum cliente registrado ainda.</div>
+    <div class="col-12">
+        <div class="alert alert-info">Nenhum cliente encontrado.</div>
+    </div>
     {% endfor %}
 </div>
 {% endblock %}
