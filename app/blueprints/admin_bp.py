@@ -1,6 +1,6 @@
 from functools import wraps
 from flask import Blueprint, render_template, request, redirect, url_for, current_app, session, flash
-import time
+import time, string
 from app import data
 from app.blueprints.user_bp import login_required_admin
 from app.search_structures.arvoreB import ArvoreB
@@ -18,47 +18,60 @@ def pagina_voos():
 @login_required_admin
 def pagina_clientes():
     lista_clientes = current_app.config.get('CLIENTES', [])
-    for cliente in lista_clientes:
-        reservas = cliente.get('reservas')
-        
-        # Se for string (ex: "['123', '456']"), converte para lista real
-        if isinstance(reservas, str):
-            try:
-                # ast.literal_eval converte a string com formato de lista para lista Python
-                # Se a string for vazia ou "[]", vira uma lista vazia []
-                if not reservas or reservas == "":
-                    cliente['reservas'] = []
-                else:
-                    cliente['reservas'] = ast.literal_eval(reservas)
-            except (ValueError, SyntaxError):
-                # Se der erro na conversão, assume lista vazia para não quebrar o site
-                cliente['reservas'] = []
-        
-        # Se for None, vira lista vazia
-        elif reservas is None:
-            cliente['reservas'] = []
             
-    cpf_busca = request.args.get('buscar_cpf') or request.form.get('buscar_cpf')    
-    clientes_para_exibir = lista_clientes
+    cpf_busca = request.args.get('buscar_cpf') or request.form.get('buscar_cpf')
+    nome_busca = request.args.get('buscar_nome') or request.args.get('buscar_nome')
+    letra_inicial = request.args.get('letra')
+    
+    clientes_para_exibir = []
     
     if cpf_busca:
-        arvore = ArvoreB(t=3)
+        arvore = current_app.config.get('ARVORE_CLIENTES_CPF')
         
-        for cliente in lista_clientes:
-            cpf = cliente.get('cpf')
-            if cpf: 
-                arvore.inserir(cpf, cliente)
-
-        resultado = arvore.buscar(cpf_busca)
-        
-        if resultado:
-            clientes_para_exibir = [resultado] # Coloca em lista para o template iterar
-            flash(f'Cliente encontrado: {resultado.get("nome")}', 'success')
+        if arvore:
+            resultado = arvore.buscar(cpf_busca.strip())
+            
+            if resultado:
+                clientes_para_exibir = [resultado] # Coloca em lista para o template iterar
+                flash(f'Cliente encontrado: {resultado.get("nome")}', 'success')
+            else:
+                clientes_para_exibir = [] # Lista vazia se não achar
+                flash('CPF não encontrado.', 'warning')
+                
         else:
-            clientes_para_exibir = [] # Lista vazia se não achar
-            flash('CPF não encontrado.', 'warning')
+            flash('Erro: Estrutura de busca por CPF não carregada.', 'danger')
+            
+    elif nome_busca:
+        arvore_nomes = current_app.config.get('ARVORE_CLIENTES_NOME')
+        
+        if arvore_nomes:
+            termo_upper = nome_busca.upper()
+            resultado_nomes = arvore_nomes.buscar_parcial(termo_upper)
+        
+            if resultado_nomes:
+                clientes_para_exibir = resultado_nomes
+                flash(f'{len(resultado_nomes)} cliente(s) encontrado(s) com este nome.', 'success')              
+            else:
+                clientes_para_exibir = [] # Lista vazia se não achar
+                flash('Nome exato não encontrado na Árvore.', 'warning')
+        else:
+            flash('Erro ao carregar árvore de nomes.', 'danger')
+    
+    elif letra_inicial:
+        clientes_para_exibir = [
+            c for c in lista_clientes 
+            if c.get('nome', '').strip().upper().startswith(letra_inicial.upper())
+        ]
+        if not clientes_para_exibir:
+            flash(f'Nenhum cliente começa com a letra {letra_inicial}.', 'info')
 
-    return render_template('admin/clientes.html', clientes=clientes_para_exibir)
+    else:
+        clientes_para_exibir = lista_clientes
+        
+    # Gerar lista ['A', 'B', 'C'...] para o HTML
+    alfabeto = list(string.ascii_uppercase)
+
+    return render_template('admin/clientes.html', clientes=clientes_para_exibir, alfabeto=alfabeto)
 
 @admin_bp.route('/voos/add', methods=['GET', 'POST'])
 @login_required_admin
