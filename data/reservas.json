@@ -46,5 +46,29 @@
         "data_compra": "02-12-2025",
         "cpf_passageiro": "777.777.777-77",
         "usuario": "romario@example.com"
+    },
+    "1764960589": {
+        "voo_id": "1",
+        "codigo": "VOO101",
+        "origem": "São Paulo",
+        "destino": "Rio de Janeiro",
+        "milhas": "300",
+        "preco": "250.5",
+        "aeronave": "Boeing 737",
+        "data_compra": "05-12-2025",
+        "cpf_passageiro": "888.888.888-88",
+        "usuario": "caioalex@example.com"
+    },
+    "1764960605": {
+        "voo_id": "8",
+        "codigo": "VOO108",
+        "origem": "Salvador",
+        "destino": "Fortaleza",
+        "milhas": "800",
+        "preco": "390.50",
+        "aeronave": "Airbus A320",
+        "data_compra": "05-12-2025",
+        "cpf_passageiro": "888.888.888-88",
+        "usuario": "caioalex@example.com"
     }
 }

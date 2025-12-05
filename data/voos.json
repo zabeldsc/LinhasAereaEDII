@@ -6,7 +6,7 @@
         "milhas": "300",
         "preco_passagem": "250.5",
         "tipo_aeronave": "Boeing 737",
-        "num_assentos": 178
+        "num_assentos": 177
     },
     "2": {
         "codigo": "VOO102",
@@ -69,7 +69,7 @@
         "milhas": "800",
         "preco_passagem": "390.50",
         "tipo_aeronave": "Airbus A320",
-        "num_assentos": 150
+        "num_assentos": 149
     },
     "9": {
         "codigo": "VOO109",
