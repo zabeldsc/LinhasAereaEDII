@@ -15,10 +15,13 @@ RESERVAS_FILE = DATA_DIR / "reservas.json"
 # ----------------------------
 
 def load_json(path):
-    if path.exists():
+    if not path.exists() or path.stat().st_size == 0:
+        return {}
+    try:
         with path.open("r", encoding="utf-8") as f:
             return json.load(f)
-    return {}
+    except json.JSONDecodeError:
+        return {}
 
 def save_json(path, data):
     path.parent.mkdir(parents=True, exist_ok=True)
@@ -45,7 +48,7 @@ def load_reservas():
     return load_json(RESERVAS_FILE)
 
 def save_reservas(reservas):
-    save_json(RESERVAS_FILE)
+    save_json(RESERVAS_FILE, reservas)
 
 # ----------------------------
 # CSV HELPERS (Clientes)
