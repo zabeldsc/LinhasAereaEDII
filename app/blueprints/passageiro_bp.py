@@ -1,6 +1,7 @@
 from flask import Blueprint, redirect, render_template, current_app, request, session, url_for, flash
 from app.blueprints.user_bp import login_required_passageiro
 from app import data
+from app.search_structures.grafo import Grafo
 import time
 
 passageiro_bp = Blueprint('passageiro', __name__, url_prefix='/passageiro')
@@ -111,6 +112,18 @@ def reservar(voo_id):
 @passageiro_bp.route('/simular_conexoes')
 @login_required_passageiro
 def simular_conexoes():
-    voos = current_app.config.get('VOOS', {})
-    # Aqui você poderia chamar sua função de grafo para simular conexões
-    return render_template('passageiro/simular_conexoes.html', voos=voos)
+    origem = request.args.get("origem")
+    destino = request.args.get("destino")
+
+    grafo = current_app.config["GRAFO"]
+    rota = None
+
+    if origem and destino:
+        rota = grafo.dijkstra(origem, destino)
+
+    return render_template(
+        "passageiro/simular_conexoes.html",
+        origem=origem,
+        destino=destino,
+        rota=rota
+    )

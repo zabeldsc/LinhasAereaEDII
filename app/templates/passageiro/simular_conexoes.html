@@ -1,0 +1,83 @@
+{% extends "passageiro/base_passageiro.html" %}
+
+{% block title %}Simular Conexões{% endblock %}
+
+{% block content %}
+<h2 class="mb-4">Simular Conexões</h2>
+
+<!-- Formulário de simulação -->
+<div class="card shadow-sm mb-4">
+    <div class="card-body">
+        <form method="GET" class="row g-3">
+            <div class="col-md-5">
+                <input type="text" name="origem" class="form-control" placeholder="Origem"
+                       value="{{ origem }}">
+            </div>
+
+            <div class="col-md-5">
+                <input type="text" name="destino" class="form-control" placeholder="Destino"
+                       value="{{ destino }}">
+            </div>
+
+            <div class="col-md-2">
+                <button type="submit" class="btn btn-primary w-100">Simular</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+{% if rota %}
+<!-- Resultado da simulação -->
+<div class="card shadow-sm mb-4">
+    <div class="card-body">
+        <h4 class="text-success">Rota Encontrada</h4>
+        <p class="mb-1"><strong>Origem:</strong> {{ origem }}</p>
+        <p class="mb-1"><strong>Destino Final:</strong> {{ destino }}</p>
+        <p class="mb-1"><strong>Conexões:</strong> {{ rota.conexoes }}</p>
+        <p class="mb-1"><strong>Milhas Totais:</strong> {{ rota.milhas_totais }}</p>
+        <p class="mb-1"><strong>Custo Total:</strong> R$ {{ rota.preco_total }}</p>
+    </div>
+</div>
+
+<!-- Detalhamento dos voos da rota -->
+<div class="card shadow-sm">
+    <div class="card-body">
+        <h5 class="mb-3">Voos na Rota</h5>
+
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Código</th>
+                    <th>Origem</th>
+                    <th>Destino</th>
+                    <th>Milhas</th>
+                    <th>Preço</th>
+                    <th>Aeronave</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for trecho in rota.trechos %}
+                <tr>
+                    <td>{{ trecho.codigo }}</td>
+                    <td>{{ trecho.origem }}</td>
+                    <td>{{ trecho.destino }}</td>
+                    <td>{{ trecho.milhas }}</td>
+                    <td>R$ {{ trecho.preco }}</td>
+                    <td>{{ trecho.aeronave }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+{% elif origem and destino %}
+<!-- Caso não exista rota -->
+<div class="alert alert-danger mt-4">
+    Não foi possível encontrar uma rota entre <strong>{{ origem }}</strong> e 
+    <strong>{{ destino }}</strong>.
+</div>
+{% endif %}
+
+{% endblock %}

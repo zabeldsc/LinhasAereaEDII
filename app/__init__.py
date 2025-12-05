@@ -5,6 +5,7 @@ from .blueprints.user_bp import user_bp
 from . import data
 from datetime import datetime
 import os
+from .search_structures.grafo import construir_grafo_voos
 
 def create_app():
     app = Flask(__name__)
@@ -28,11 +29,9 @@ def create_app():
     app.config['RESERVAS'] = data.load_reservas()
     
     clientes_raw = data.load_clientes()
-    if isinstance(clientes_raw, dict):
-        app.config['CLIENTES'] = list(clientes_raw.values())
-    else:
-        # Se já for lista, atribui direto
-        app.config['CLIENTES'] = clientes_raw
+    app.config['CLIENTES'] = clientes_raw if isinstance(clientes_raw, list) else list(clientes_raw.values())
+    app.config["GRAFO"] = construir_grafo_voos(app.config["VOOS"])
+
     # Rota raiz
     @app.route('/')
     def raiz():
