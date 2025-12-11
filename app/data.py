@@ -1,6 +1,6 @@
 from pathlib import Path
-import json
-import csv
+import json, csv, ast
+from app.search_structures.arvoreB import ArvoreB
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 DATA_DIR = BASE_DIR / "data"
@@ -74,3 +74,70 @@ def save_clientes(clientes):
         writer = csv.DictWriter(f, fieldnames=FIELDNAMES_CLIENTES)
         writer.writeheader()
         writer.writerows(clientes)
+
+# ----------------------------
+# BTree HELPERS
+# ----------------------------
+
+def load_tree_cpf():
+    clientes = load_clientes()
+    
+    arvore = ArvoreB(3)
+    for cliente in clientes:
+        reservas = cliente.get('reservas')
+        
+        # Se for string (ex: "['123', '456']"), converte para lista real
+        if isinstance(reservas, str):
+            try:
+                # ast.literal_eval converte a string com formato de lista para lista Python
+                # Se a string for vazia ou "[]", vira uma lista vazia []
+                if not reservas or reservas == "":
+                    cliente['reservas'] = []
+                else:
+                    cliente['reservas'] = ast.literal_eval(reservas)
+            except (ValueError, SyntaxError):
+                # Se der erro na conversão, assume lista vazia para não quebrar o site
+                cliente['reservas'] = []
+        
+        # Se for None, vira lista vazia
+        elif reservas is None:
+            cliente['reservas'] = []
+        
+        cpf_extraido = cliente.get('cpf')
+        cpf = cpf_extraido.strip()
+        if cpf:
+            arvore.inserir(cpf, cliente)
+    
+    return arvore
+            
+def load_tree_nomes():
+    clientes = load_clientes()
+    arvore_nomes = ArvoreB(3)
+    for cliente in clientes:
+        reservas = cliente.get('reservas')        
+        # Se for string (ex: "['123', '456']"), converte para lista real
+        if isinstance(reservas, str):
+            try:
+                # ast.literal_eval converte a string com formato de lista para lista Python
+                # Se a string for vazia ou "[]", vira uma lista vazia []
+                if not reservas or reservas == "":
+                    cliente['reservas'] = []
+                else:
+                    cliente['reservas'] = ast.literal_eval(reservas)
+            except (ValueError, SyntaxError):
+                # Se der erro na conversão, assume lista vazia para não quebrar o site
+                cliente['reservas'] = []
+        
+        # Se for None, vira lista vazia
+        elif reservas is None:
+            cliente['reservas'] = []
+
+        nome_completo = cliente.get('nome', '').strip().upper()
+        if nome_completo:
+            lista = arvore_nomes.buscar(nome_completo)
+            if lista:
+                lista.append(cliente)
+            else:
+                arvore_nomes.inserir(nome_completo, [cliente])
+    
+    return arvore_nomes

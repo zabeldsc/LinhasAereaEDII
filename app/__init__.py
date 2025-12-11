@@ -27,7 +27,9 @@ def create_app():
     app.config['VOOS'] = data.load_voos()
     app.config['ADM_KEYS'] = data.load_adm_keys()
     app.config['RESERVAS'] = data.load_reservas()
-    
+    app.config['ARVORE_CLIENTES_CPF'] = data.load_tree_cpf()
+    app.config['ARVORE_CLIENTES_NOME'] = data.load_tree_nomes()
+
     clientes_raw = data.load_clientes()
     app.config['CLIENTES'] = clientes_raw if isinstance(clientes_raw, list) else list(clientes_raw.values())
     app.config["GRAFO"] = construir_grafo_voos(app.config["VOOS"])

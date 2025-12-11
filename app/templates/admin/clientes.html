@@ -3,48 +3,103 @@
 {% block title %}Gestão de Clientes{% endblock %}
 
 {% block content %}
-<h1 class="mb-4">Gestão de Clientes</h1>
+<div class="container mt-4">
+    <h1 class="mb-4">Gestão de Clientes</h1>
 
-<form class="mb-4 d-flex" method="GET" action="{{ url_for('admin.pagina_clientes') }}">
-    <input type="text" name="buscar_cpf" class="form-control me-2" 
-           placeholder="Buscar por CPF (Ex: 123.456.789-00)" 
-           value="{{ request.args.get('buscar_cpf', '') }}">
-    
-    <button class="btn btn-primary me-2" type="submit">Buscar</button>
-    
-    {% if request.args.get('buscar_cpf') %}
-        <a href="{{ url_for('admin.pagina_clientes') }}" class="btn btn-secondary">Limpar</a>
-    {% endif %}
-</form>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+          <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+          </div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
 
-<div class="row">
-    {% for cliente in clientes %}
-    <div class="col-md-4 mb-3">
-        <div class="card h-100">
-            <div class="card-body">
-                <h5 class="card-title">{{ cliente.nome }}</h5>
-                <h6 class="card-subtitle mb-2 text-muted">CPF: {{ cliente.cpf }}</h6>
-                <p class="card-text">
-                    <strong>Email:</strong> {{ cliente.email }}<br>
-                    <strong>Milhas Acumuladas:</strong> {{ cliente.milhas }}<br>
-                    
-                    <strong>Total de Viagens:</strong> 
-                    {% if cliente.reservas is iterable and cliente.reservas is not string %}
-                        {{ cliente.reservas|length }}
-                    {% else %}
-                        0
-                    {% endif %}
-                </p>
+    <div class="card p-3 mb-4 bg-light">
+        <form method="GET" action="{{ url_for('admin.pagina_clientes') }}" class="row g-3">
+            
+            <div class="col-md-5">
+                <div class="input-group">
+                    <span class="input-group-text"><i class="fas fa-id-card"></i></span>
+                    <input type="text" name="buscar_cpf" class="form-control" 
+                           placeholder="Buscar CPF exato..." 
+                           value="{{ request.args.get('buscar_cpf') or request.form.get('buscar_cpf', '') }}">
+                </div>
             </div>
-            <div class="card-footer bg-transparent">
-                <small class="text-muted">Status: Ativo</small>
+
+            <div class="col-md-5">
+                <div class="input-group">
+                    <span class="input-group-text"><i class="fas fa-user"></i></span>
+                    <input type="text" name="buscar_nome" class="form-control" 
+                           placeholder="Buscar parte do nome..." 
+                           value="{{ request.args.get('buscar_nome') or request.form.get('buscar_nome', '') }}">
+                </div>
             </div>
+
+            <div class="col-md-2 d-grid">
+                <button class="btn btn-primary" type="submit">Pesquisar</button>
+            </div>
+        </form>
+        
+        {% if request.args.get('buscar_cpf') or request.args.get('buscar_nome') or request.form.get('buscar_cpf') or request.form.get('buscar_nome') or request.args.get('letra') %}
+        <div class="mt-2 text-end">
+            <a href="{{ url_for('admin.pagina_clientes') }}" class="text-decoration-none text-danger">
+                <small>✕ Limpar filtros e mostrar todos</small>
+            </a>
+        </div>
+        {% endif %}
+    </div>
+
+    <div class="mb-4 text-center">
+        <div class="btn-group flex-wrap" role="group" aria-label="Filtro por letra">
+            <a href="{{ url_for('admin.pagina_clientes') }}" 
+               class="btn btn-sm btn-outline-secondary {% if not request.args.get('letra') %}active{% endif %}">
+               Todos
+            </a>
+            {% for letra in alfabeto %}
+                <a href="{{ url_for('admin.pagina_clientes', letra=letra) }}" 
+                   class="btn btn-sm btn-outline-primary {% if request.args.get('letra') == letra %}active{% endif %}">
+                   {{ letra }}
+                </a>
+            {% endfor %}
         </div>
     </div>
-    {% else %}
-    <div class="col-12">
-        <div class="alert alert-info">Nenhum cliente encontrado.</div>
+
+    <div class="row">
+        {% for cliente in clientes %}
+        <div class="col-md-4 mb-3">
+            <div class="card h-100 shadow-sm border-0">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <h5 class="card-title text-primary fw-bold">{{ cliente.nome }}</h5>
+                        <span class="badge bg-success">{{ cliente.milhas }} milhas</span>
+                    </div>
+                    <h6 class="card-subtitle mb-3 text-muted">CPF: {{ cliente.cpf }}</h6>
+                    
+                    <ul class="list-group list-group-flush small">
+                        <li class="list-group-item px-0">
+                            <strong>Email:</strong> {{ cliente.email }}
+                        </li>
+                        <li class="list-group-item px-0">
+                            <strong>Viagens:</strong> 
+                            {% if cliente.reservas is sequence %}
+                                {{ cliente.reservas|length }}
+                            {% else %}
+                                0
+                            {% endif %}
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        {% else %}
+        <div class="col-12 text-center py-5">
+            <h4 class="text-muted">Nenhum cliente encontrado.</h4>
+            <p>Verifique o CPF ou o Nome digitado.</p>
+        </div>
+        {% endfor %}
     </div>
-    {% endfor %}
 </div>
 {% endblock %}

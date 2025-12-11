@@ -61,6 +61,7 @@ def login():
             session['usuario'] = email
             session['nome'] = passageiro["nome"]
             session['tipo'] = "passageiro"
+            session['cpf'] = passageiro["cpf"]
 
             flash(f"Bem-vindo, {session['nome']}!", "success")
             return redirect(url_for('passageiro.dashboard'))
@@ -101,20 +102,37 @@ def cadastro():
             flash("Email já cadastrado!", "error")
             return redirect(url_for('user.cadastro'))
 
-        clientes.append({
+        novo_cliente = {
             "cpf": cpf,
             "nome": nome,
             "email": email,
             "senha": senha,
             "milhas": "0",
             "reservas": []
-        })
-
+        }
+        clientes.append(novo_cliente)
         data.save_clientes(clientes)
+        
+        #Como a arvore carrega no init, insiro o cpf/nome cadastrado na arvore
+        arvore_cpf = current_app.config.get('ARVORE_CLIENTES_CPF')
+        arvore_nomes = current_app.config.get('ARVORE_CLIENTES_NOME')
+        
+        if arvore_cpf and novo_cliente['cpf']:
+            arvore_cpf.inserir(novo_cliente['cpf'], novo_cliente)
+            
+        if arvore_nomes and novo_cliente['nome']:
+            nome_upper = novo_cliente['nome'].strip().upper()
+            lista_existente = arvore_nomes.buscar(nome_upper)
+            if lista_existente:
+                lista_existente.append(novo_cliente)
+            else:
+                arvore_nomes.inserir(nome_upper, [novo_cliente])
+            
 
         session['usuario'] = email
         session['nome'] = nome
         session['tipo'] = 'passageiro'
+        session['cpf'] = cpf
 
         flash("Cadastro realizado com sucesso!", "success")
         return redirect(url_for('passageiro.dashboard'))
