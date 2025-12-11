@@ -6,7 +6,7 @@
         "milhas": "300",
         "preco_passagem": "250.5",
         "tipo_aeronave": "Boeing 737",
-        "num_assentos": 177
+        "num_assentos": 180
     },
     "2": {
         "codigo": "VOO102",
@@ -15,7 +15,7 @@
         "milhas": "1200",
         "preco_passagem": "550.00",
         "tipo_aeronave": "Airbus A320",
-        "num_assentos": 148
+        "num_assentos": 150
     },
     "3": {
         "codigo": "VOO103",
@@ -69,7 +69,7 @@
         "milhas": "800",
         "preco_passagem": "390.50",
         "tipo_aeronave": "Airbus A320",
-        "num_assentos": 149
+        "num_assentos": 150
     },
     "9": {
         "codigo": "VOO109",
@@ -114,7 +114,7 @@
         "milhas": "1350",
         "preco_passagem": "500.50",
         "tipo_aeronave": "Boeing 737",
-        "num_assentos": "180"
+        "num_assentos": 180
     },
     "14": {
         "codigo": "VOO114",
@@ -213,7 +213,7 @@
         "milhas": "1100",
         "preco_passagem": "450.50",
         "tipo_aeronave": "Embraer 195",
-        "num_assentos": "120"
+        "num_assentos": 120
     },
     "25": {
         "codigo": "VOO125",
