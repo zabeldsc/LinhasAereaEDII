@@ -2,7 +2,8 @@ from flask import Blueprint, redirect, render_template, current_app, request, se
 from app.blueprints.user_bp import login_required_passageiro
 from app import data
 from app.search_structures.grafo import Grafo
-import time
+import time, random
+from datetime import datetime, timedelta
 
 passageiro_bp = Blueprint('passageiro', __name__, url_prefix='/passageiro')
 
@@ -63,6 +64,21 @@ def reservar(voo_id):
         if not cliente:
             flash("Erro: cliente não encontrado.", "danger")
             return redirect(url_for("passageiro.dashboard"))
+        
+        #Pega o valor escolhido pelo user no site
+        data_viagem_input = request.form.get('data_viagem')
+        if data_viagem_input:
+            try:
+                objeto_data = datetime.strptime(data_viagem_input, '%Y-%m-%d')
+                data_viagem_str = objeto_data.strftime('%d-%m-%Y')
+            except ValueError:
+                data_viagem_str = time.strftime('%d-%m-%Y')
+        #Se nao houver data inserida, eu gero a viagem sendo entre 7-15 dias apos reserva
+        else:
+            hoje = datetime.now()
+            valor_aleatorio = random.randint(7, 15)
+            data_futura = hoje + timedelta(days=valor_aleatorio)
+            data_viagem_str = data_futura.strftime('%d-%m-%Y')
 
         cpf_passageiro = cliente.get("cpf")
 
@@ -79,12 +95,15 @@ def reservar(voo_id):
             "preco": voo["preco_passagem"],
             "aeronave": voo["tipo_aeronave"],
             "data_compra": time.strftime('%d-%m-%Y'),
+            "data_viagem": data_viagem_str,
             "cpf_passageiro": cpf_passageiro,
             "usuario": usuario_email
         }
 
         # Atualizar milhas
         cliente["milhas"] = int(cliente.get("milhas", 0)) + int(voo["milhas"])
+        
+        cliente["data_viagem"] = data_viagem_str
 
         # Garantir lista de reservas válida
         if not isinstance(cliente.get("reservas"), list):
@@ -104,7 +123,7 @@ def reservar(voo_id):
         current_app.config["RESERVAS"] = reservas
         current_app.config["CLIENTES"] = clientes
 
-        flash("Reserva realizada com sucesso!", "success")
+        flash(f"Reserva confirmada! Sua viagem será em {data_viagem_str}.", "success")
         return redirect(url_for("passageiro.dashboard"))
 
     return render_template("passageiro/comprar.html", voo=voo, voo_id=voo_id)

@@ -82,8 +82,18 @@
                         <li class="list-group-item px-0">
                             <strong>Email:</strong> {{ cliente.email }}
                         </li>
+                        
                         <li class="list-group-item px-0">
-                            <strong>Viagens:</strong> 
+                            <strong>Próxima Viagem:</strong> 
+                            {% if cliente.data_viagem %}
+                                {{ cliente.data_viagem }}
+                            {% else %}
+                                <span class="text-muted">Nenhuma agendada</span>
+                            {% endif %}
+                        </li>
+
+                        <li class="list-group-item px-0">
+                            <strong>Viagens Totais:</strong> 
                             {% if cliente.reservas is sequence %}
                                 {{ cliente.reservas|length }}
                             {% else %}
