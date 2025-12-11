@@ -19,6 +19,13 @@
                 <hr>
                 
                 <form method="POST">
+                    <div class="mb-3">
+                        <label for="data_viagem" class="form-label">Escolha a data da viagem:</label>
+                        <input type="date" name="data_viagem" id="data_viagem" class="form-control" 
+                               min="{{ year }}-01-01">
+                        <div class="form-text">Deixe em branco para uma data automática (7-15 dias).</div>
+                    </div>
+
                     <div class="d-grid gap-2">
                         <button type="submit" class="btn btn-success btn-lg">Confirmar Reserva</button>
                         <a href="{{ url_for('passageiro.consultar_voos') }}" class="btn btn-secondary">Cancelar</a>
