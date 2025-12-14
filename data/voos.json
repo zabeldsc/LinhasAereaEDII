@@ -3,10 +3,10 @@
         "codigo": "VOO101",
         "origem": "São Paulo",
         "destino": "Rio de Janeiro",
-        "milhas": "300",
-        "preco_passagem": "250.5",
+        "milhas": "121",
+        "preco_passagem": "50.00",
         "tipo_aeronave": "Boeing 737",
-        "num_assentos": 180
+        "num_assentos": "273"
     },
     "2": {
         "codigo": "VOO102",
@@ -287,13 +287,13 @@
         "tipo_aeronave": "Não Sei",
         "num_assentos": "180"
     },
-    "1765733732": {
-        "codigo": "VOO1765733732",
-        "origem": "Brasília",
-        "destino": "Dubai",
+    "1765747935": {
+        "codigo": "VOO1765747935",
+        "origem": "Curitiba",
+        "destino": "Salvador",
         "milhas": "1200",
-        "preco_passagem": "150.000",
-        "tipo_aeronave": "Não sei",
-        "num_assentos": "120"
+        "preco_passagem": "5000,00",
+        "tipo_aeronave": "Boeing 167",
+        "num_assentos": "200"
     }
 }

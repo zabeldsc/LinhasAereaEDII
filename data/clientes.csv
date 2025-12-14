@@ -1,4 +1,4 @@
 cpf,nome,email,senha,codigo_reserva,data_viagem,milhas,reservas
-111.111.111-11,Antonio Carlos,antonio@example.com,senha123,,,0,[]
+111.111.111-11,Antonio Carlos,antonio@example.com,senha123,,22-12-2025,721,['1765751444']
 333.333.333-33,Romario da Silva,romario@example.com,senha123,,,0,[]
 555.555.555-55,Caio Alexandre,caio@example.com,senha123,,,0,[]

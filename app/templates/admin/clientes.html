@@ -25,7 +25,7 @@
                             <i class="bi bi-person-vcard"></i>
                         </span>
                         <input type="text" id="buscar_cpf" name="buscar_cpf" class="form-control"
-                            placeholder="Buscar CPF exato"
+                            placeholder="Buscar CPF"
                             value="{{ request.args.get('buscar_cpf') or request.form.get('buscar_cpf', '') }}">
                     </div>
                 </div>
@@ -36,7 +36,7 @@
                         <span class="input-group-text">
                             <i class="bi bi-person"></i>
                         </span>
-                        <input type="text" name="buscar_nome" class="form-control" placeholder="Buscar parte do nome"
+                        <input type="text" name="buscar_nome" class="form-control" placeholder="Buscar nome"
                             value="{{ request.args.get('buscar_nome') or request.form.get('buscar_nome', '') }}">
                     </div>
                 </div>

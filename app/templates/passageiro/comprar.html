@@ -3,32 +3,99 @@
 {% block title %}Confirmar Compra{% endblock %}
 
 {% block content %}
-<div class="row justify-content-center">
-    <div class="col-md-6">
-        <div class="card shadow-sm">
-            <div class="card-header bg-primary text-white">
-                <h4 class="mb-0">Confirmar Reserva</h4>
+
+<style>
+    /* Estilos Customizados para o Card de Confirmação */
+    .confirmation-card {
+        border: none;
+        border-radius: 12px;
+        overflow: hidden;
+    }
+
+    .card-header-custom {
+        background-color: #0d6efd;
+        /* Azul Primário para Header */
+        color: white;
+        padding: 1rem 1.5rem;
+        font-size: 1.25rem;
+        font-weight: 600;
+        text-align: center;
+    }
+
+    .info-label {
+        color: #6c757d;
+        /* Cinza para rótulos */
+        font-weight: 500;
+    }
+
+    .info-value {
+        font-weight: 700;
+        color: #212529;
+        /* Preto para valores */
+    }
+
+    .route-display {
+        font-size: 1.4rem;
+        font-weight: 600;
+        color: #0d6efd;
+    }
+</style>
+
+<div class="row justify-content-center mt-5">
+    <div class="col-md-7 col-lg-5">
+        <div class="card confirmation-card shadow-lg">
+
+            <div class="card-header-custom">
+                <i class="bi bi-shield-check me-2"></i> Confirmar Sua Reserva
             </div>
-            <div class="card-body">
-                <h5 class="card-title">Resumo do Voo: {{ voo.codigo }}</h5>
-                <p><strong>Origem:</strong> {{ voo.origem }}</p>
-                <p><strong>Destino:</strong> {{ voo.destino }}</p>
-                <p><strong>Preço:</strong> R$ {{ voo.preco_passagem }}</p>
-                <p><strong>Aeronave:</strong> {{ voo.tipo_aeronave }}</p>
-                
+
+            <div class="card-body p-4">
+
+                <div class="text-center mb-4 border-bottom pb-3">
+                    <span class="route-display">
+                        {{ voo.origem }}
+                        <i class="bi bi-arrow-right-short mx-2"></i>
+                        {{ voo.destino }}
+                    </span>
+                    <h5 class="card-title fw-bold mt-2 mb-0 text-muted small">
+                        Voo: {{ voo.codigo }}
+                    </h5>
+                </div>
+
+                <dl class="row small mb-4">
+                    <dt class="col-4 info-label">Aeronave:</dt>
+                    <dd class="col-8 info-value">{{ voo.tipo_aeronave }}</dd>
+
+                    <dt class="col-4 info-label">Preço Total:</dt>
+                    <dd class="col-8 info-value fs-5 text-success">
+                        R$ {{ voo.preco_passagem }}
+                    </dd>
+                </dl>
+
                 <hr>
-                
+
                 <form method="POST">
-                    <div class="mb-3">
-                        <label for="data_viagem" class="form-label">Escolha a data da viagem:</label>
-                        <input type="date" name="data_viagem" id="data_viagem" class="form-control" 
-                               min="{{ year }}-01-01">
-                        <div class="form-text">Deixe em branco para uma data automática (7-15 dias).</div>
+                    <div class="mb-4">
+                        <label for="data_viagem" class="form-label info-label">Escolha a data da viagem
+                            (opcional):</label>
+
+                        <input type="date" name="data_viagem" id="data_viagem" class="form-control"
+                            min="{{ min_date }}">
+
+                        <div class="form-text mt-2">
+                            Se o campo for deixado em branco, o sistema reservará a passagem para uma data entre 7 e 15
+                            dias a partir de hoje.
+                        </div>
                     </div>
 
-                    <div class="d-grid gap-2">
-                        <button type="submit" class="btn btn-success btn-lg">Confirmar Reserva</button>
-                        <a href="{{ url_for('passageiro.consultar_voos') }}" class="btn btn-secondary">Cancelar</a>
+                    <div class="d-grid gap-2 mt-4">
+                        <button type="submit" class="btn btn-success btn-lg fw-bold">
+                            <i class="bi bi-check-circle-fill me-2"></i>
+                            Confirmar Reserva
+                        </button>
+                        <a href="{{ url_for('passageiro.consultar_voos') }}" class="btn btn-outline-secondary">
+                            Voltar e Cancelar
+                        </a>
                     </div>
                 </form>
             </div>

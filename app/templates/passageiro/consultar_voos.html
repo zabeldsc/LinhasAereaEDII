@@ -35,11 +35,11 @@
     <tbody>
         {% for id, voo in voos.items() %}
         <tr>
-            <td>{{ voo.codigo }}</td>
+            <td class="fw-semibold">{{ voo.codigo }}</td>
             <td>{{ voo.origem }}</td>
             <td>{{ voo.destino }}</td>
             <td>{{ voo.milhas }}</td>
-            <td>R$ {{ voo.preco_passagem }}</td>
+            <td class="fw-semibold text-success">R$ {{ voo.preco_passagem }}</td>
             <td>{{ voo.tipo_aeronave }}</td>
             <td>{{ voo.num_assentos }}</td>
             <td>
