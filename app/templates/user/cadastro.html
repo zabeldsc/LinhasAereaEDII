@@ -1,59 +1,98 @@
 {% extends "user/base_user.html" %}
 
-{% block title %}Cadastro de Passageiro{% endblock %}
+{% block title %}Cadastro | AirFlow{% endblock %}
 
 {% block content %}
-<div class="row justify-content-center">
-    <div class="col-md-6 col-lg-4">
-        <div class="card shadow-sm p-4">
-            <h1 class="text-center mb-4 text-primary">Cadastro</h1>
-            <hr>
+<div class="d-flex justify-content-center align-items-center" style="min-height: 72vh;">
+
+    <div class="col-11 col-sm-9 col-md-7 col-lg-4">
+
+        <div class="card border-0 shadow-sm rounded-4 p-4">
+
+            <!-- Título -->
+            <div class="text-center mb-4">
+                <h1 class="fw-semibold mb-2 fs-3" style="color:#0d3b66;">
+                    Criar conta
+                </h1>
+                <p class="text-muted mb-0">
+                    Cadastre-se para acessar o AirFlow
+                </p>
+            </div>
 
             {% with messages = get_flashed_messages(with_categories=true) %}
             {% if messages %}
                 {% for category, message in messages %}
-                <div class="alert alert-{{ 'success' if category=='success' else 'danger' }}">
+                <div class="alert alert-{{ 'success' if category=='success' else 'danger' }} text-center">
                     {{ message }}
                 </div>
                 {% endfor %}
             {% endif %}
             {% endwith %}
 
+            <!-- Formulário -->
             <form method="POST">
-                <div class="mb-3">
-                    <label for="nome" class="form-label">Nome:</label>
-                    <input type="text" id="nome" name="nome" class="form-control" required>
-                </div>
 
                 <div class="mb-3">
-                    <label for="email" class="form-label">Email:</label>
-                    <input type="email" id="email" name="email" class="form-control" required>
-                </div>
-
-                <div class="mb-3">
-                    <label for="cpf" class="form-label">CPF:</label>
-                    <input 
-                        type="text" 
-                        id="cpf" 
-                        name="cpf" 
-                        class="form-control" 
-                        placeholder="000.000.000-00" 
+                    <label for="nome" class="form-label fw-medium">
+                        Nome completo
+                    </label>
+                    <input type="text" id="nome" name="nome"
+                        class="form-control"
+                        placeholder="Seu nome"
+                        style="padding: 0.55rem 0.75rem;"
                         required>
-                </div>                
+                </div>
 
                 <div class="mb-3">
-                    <label for="senha" class="form-label">Senha:</label>
-                    <input type="password" id="senha" name="senha" class="form-control" required>
+                    <label for="email" class="form-label fw-medium">
+                        E-mail
+                    </label>
+                    <input type="email" id="email" name="email"
+                        class="form-control"
+                        placeholder="seuemail@email.com"
+                        style="padding: 0.55rem 0.75rem;"
+                        required>
                 </div>
 
-                <div class="d-grid">
-                    <button type="submit" class="btn btn-primary">Cadastrar</button>
+                <div class="mb-3">
+                    <label for="cpf" class="form-label fw-medium">
+                        CPF
+                    </label>
+                    <input type="text" id="cpf" name="cpf"
+                        class="form-control"
+                        placeholder="000.000.000-00"
+                        style="padding: 0.55rem 0.75rem;"
+                        required>
                 </div>
+
+                <div class="mb-4">
+                    <label for="senha" class="form-label fw-medium">
+                        Senha
+                    </label>
+                    <input type="password" id="senha" name="senha"
+                        class="form-control"
+                        placeholder="Crie uma senha"
+                        style="padding: 0.55rem 0.75rem;"
+                        required>
+                </div>
+
+                <div class="d-grid mb-3">
+                    <button type="submit"
+                        class="btn btn-primary fw-medium"
+                        style="padding: 0.55rem;">
+                        Criar conta
+                    </button>
+                </div>
+
             </form>
 
-            <div class="text-center mt-3">
-                <a href="{{ url_for('user.login') }}" class="text-decoration-none">← Voltar para Login</a>
+            <!-- Link -->
+            <div class="text-center small">
+                <a href="{{ url_for('user.login') }}" class="text-decoration-none">
+                    ← Voltar para Login
+                </a>
             </div>
+
         </div>
     </div>
 </div>

@@ -277,5 +277,23 @@
         "preco_passagem": "5800",
         "tipo_aeronave": "Boeing 777",
         "num_assentos": "300"
+    },
+    "1765732265": {
+        "codigo": "VOO101",
+        "origem": "São Paulo",
+        "destino": "Salvador",
+        "milhas": "1200",
+        "preco_passagem": "20.75",
+        "tipo_aeronave": "Não Sei",
+        "num_assentos": "180"
+    },
+    "1765733732": {
+        "codigo": "VOO1765733732",
+        "origem": "Brasília",
+        "destino": "Dubai",
+        "milhas": "1200",
+        "preco_passagem": "150.000",
+        "tipo_aeronave": "Não sei",
+        "num_assentos": "120"
     }
 }
