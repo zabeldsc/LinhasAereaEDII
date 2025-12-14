@@ -134,7 +134,7 @@ def edit_voo(voo_id):
 
     if request.method == "POST":
         voos[voo_id] = {
-            "codigo": request.form["codigo"],
+            "codigo": voo["codigo"],
             "origem": request.form["origem"],
             "destino": request.form["destino"],
             "milhas": request.form["milhas"],
