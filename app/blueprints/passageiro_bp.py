@@ -2,7 +2,7 @@ from flask import Blueprint, redirect, render_template, current_app, request, se
 from app.blueprints.user_bp import login_required_passageiro
 from app import data
 from app.search_structures.grafo import Grafo
-import time, random
+import time, random, folium
 from datetime import datetime, timedelta
 
 passageiro_bp = Blueprint('passageiro', __name__, url_prefix='/passageiro')
@@ -133,16 +133,58 @@ def reservar(voo_id):
 def simular_conexoes():
     origem = request.args.get("origem")
     destino = request.args.get("destino")
-
+    coordenadas = data.load_coordenadas()
     grafo = current_app.config["GRAFO"]
+    listar_aeroportos = sorted(coordenadas.keys())
+    mapa_html = None
     rota = None
 
     if origem and destino:
         rota = grafo.dijkstra(origem, destino)
+        
+        if rota:
+            
+            #Crio o mapa base
+            mapa_base = folium.Map(location=[-15.793889, -47.882778], zoom_start=4)
+            
+            #lista para guardar as conexoes lat,long
+            pontos_trajeto = []
+            
+            #Pega o primeiro ponto(origem)
+            primeiro_voo = rota["trechos"][0]
+            pontos_trajeto.append(primeiro_voo["origem"])
+            
+            for trecho in rota["trechos"]:
+                pontos_trajeto.append(trecho["destino"])
+
+            #pega as coordenadas baseado nas chaves previamente coletadas
+            lista_coordenadas = []
+            for ponto in pontos_trajeto:
+                if ponto in coordenadas:
+                    lat, lon = coordenadas[ponto]
+                    lista_coordenadas.append([lat, lon])
+                    
+                    #Adiciono os marcadores das coordenadas
+                    folium.Marker(
+                        location=[lat, lon],
+                        tooltip=ponto,
+                        icon=folium.Icon(color="blue", icon="plane")
+                    ).add_to(mapa_base)
+            
+            folium.PolyLine(
+                locations=lista_coordenadas,
+                color="red",
+                weight=2.5,
+                opacity=1
+            ).add_to(mapa_base)
+            
+            mapa_html = mapa_base._repr_html_()
 
     return render_template(
         "passageiro/simular_conexoes.html",
         origem=origem,
         destino=destino,
-        rota=rota
+        rota=rota,
+        mapa=mapa_html,
+        aeroportos=listar_aeroportos
     )

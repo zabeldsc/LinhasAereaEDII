@@ -1,10 +1,10 @@
 from functools import wraps
 from flask import Blueprint, render_template, request, redirect, url_for, current_app, session, flash
-import time, string
+import time, string, ast
 from app import data
 from app.blueprints.user_bp import login_required_admin
 from app.search_structures.arvoreB import ArvoreB
-import ast
+from app.search_structures.lat_lon_search import buscar_coordenada
 
 admin_bp = Blueprint('admin', __name__, url_prefix='/admin')
 
@@ -78,6 +78,8 @@ def pagina_clientes():
 def add_voos():
     if request.method == "POST":
         voos = current_app.config.get('VOOS', {})
+        coordenadas = current_app.config.get('COORDENADAS', {})
+        
         voo_id = str(int(time.time()))
         voos[voo_id] = {
             "codigo": request.form["codigo"],
@@ -90,6 +92,24 @@ def add_voos():
         }
         current_app.config['VOOS'] = voos
         data.save_voos(voos)
+        
+        aeroporto1 = voos[voo_id]["origem"]
+        aeroporto2 = voos[voo_id]["destino"]
+        alterou_coordenadas = False
+        
+        if aeroporto1 not in coordenadas:
+            coordenada = buscar_coordenada(aeroporto1)
+            if coordenada:
+                coordenadas[aeroporto1] = coordenada
+                alterou_coordenadas = True
+        if aeroporto2 not in coordenadas:
+            coordenada = buscar_coordenada(aeroporto2)
+            if coordenada:
+                coordenadas[aeroporto2] = coordenada
+                alterou_coordenadas = True
+        if alterou_coordenadas:
+            data.save_coordenadas(coordenadas)
+            
         return redirect(url_for('admin.pagina_voos'))
 
     return render_template('admin/voos_add.html')

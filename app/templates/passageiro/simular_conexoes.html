@@ -10,21 +10,50 @@
     <div class="card-body">
         <form method="GET" class="row g-3">
             <div class="col-md-5">
-                <input type="text" name="origem" class="form-control" placeholder="Origem"
-                       value="{{ origem }}">
+                <label for="origem" class="form-label fw-bold">Origem</label>
+                <select name="origem" id="origem" class="form-select" required>
+                    <option value="" disabled {% if not origem %}selected{% endif %}>Selecione a origem...</option>
+                    
+                    {% for codigo in aeroportos %}
+                        <option value="{{ codigo }}" {% if codigo == origem %}selected{% endif %}>
+                            {{ codigo }}
+                        </option>
+                    {% endfor %}
+                    
+                </select>
             </div>
 
             <div class="col-md-5">
-                <input type="text" name="destino" class="form-control" placeholder="Destino"
-                       value="{{ destino }}">
+                <label for="destino" class="form-label fw-bold">Destino</label>
+                <select name="destino" id="destino" class="form-select" required>
+                    <option value="" disabled {% if not destino %}selected{% endif %}>Selecione o destino...</option>
+                    
+                    {% for codigo in aeroportos %}
+                        <option value="{{ codigo }}" {% if codigo == destino %}selected{% endif %}>
+                            {{ codigo }}
+                        </option>
+                    {% endfor %}
+                    
+                </select>
             </div>
 
-            <div class="col-md-2">
+            <div class="col-md-2 d-flex align-items-end">
                 <button type="submit" class="btn btn-primary w-100">Simular</button>
             </div>
         </form>
     </div>
 </div>
+
+{% if mapa %}
+    <div class="card shadow-sm mb-4">
+        <div class="card-body">
+            <h4 class="text-success">Visualização da Rota</h4>
+            <div style="width: 100%; height: 500px;">
+                {{ mapa | safe }}
+            </div>
+        </div>
+    </div>
+{% endif %}
 
 {% if rota %}
 <!-- Resultado da simulação -->

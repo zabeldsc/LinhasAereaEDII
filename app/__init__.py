@@ -29,6 +29,7 @@ def create_app():
     app.config['RESERVAS'] = data.load_reservas()
     app.config['ARVORE_CLIENTES_CPF'] = data.load_tree_cpf()
     app.config['ARVORE_CLIENTES_NOME'] = data.load_tree_nomes()
+    app.config['COORDENADAS'] = data.load_coordenadas()
 
     clientes_raw = data.load_clientes()
     app.config['CLIENTES'] = clientes_raw if isinstance(clientes_raw, list) else list(clientes_raw.values())
