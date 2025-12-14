@@ -268,5 +268,14 @@
         "preco_passagem": "570.00",
         "tipo_aeronave": "Embraer 195",
         "num_assentos": "120"
+    },
+    "1765685476": {
+        "codigo": "VOO131",
+        "origem": "São Paulo",
+        "destino": "Dubai",
+        "milhas": "7700",
+        "preco_passagem": "5800",
+        "tipo_aeronave": "Boeing 777",
+        "num_assentos": "300"
     }
 }
