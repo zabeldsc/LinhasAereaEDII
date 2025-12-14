@@ -77,13 +77,16 @@ def pagina_clientes():
 @admin_bp.route('/voos/add', methods=['GET', 'POST'])
 @login_required_admin
 def add_voos():
+    voos = current_app.config.get('VOOS', {})
+    coordenadas = current_app.config.get('COORDENADAS', {})
+
+    # Gera código automaticamente
+    codigo_automatico = f"VOO{int(time.time())}"
+
     if request.method == "POST":
-        voos = current_app.config.get('VOOS', {})
-        coordenadas = current_app.config.get('COORDENADAS', {})
-        
         voo_id = str(int(time.time()))
         voos[voo_id] = {
-            "codigo": request.form["codigo"],
+            "codigo": codigo_automatico,
             "origem": request.form["origem"],
             "destino": request.form["destino"],
             "milhas": request.form["milhas"],
@@ -91,30 +94,22 @@ def add_voos():
             "tipo_aeronave": request.form["tipo_aeronave"],
             "num_assentos": request.form["num_assentos"]
         }
+
         current_app.config['VOOS'] = voos
         data.save_voos(voos)
-        current_app.config["GRAFO"] = construir_grafo_voos(current_app.config["VOOS"])
-        
-        aeroporto1 = voos[voo_id]["origem"]
-        aeroporto2 = voos[voo_id]["destino"]
-        alterou_coordenadas = False
-        
-        if aeroporto1 not in coordenadas:
-            coordenada = buscar_coordenada(aeroporto1)
-            if coordenada:
-                coordenadas[aeroporto1] = coordenada
-                alterou_coordenadas = True
-        if aeroporto2 not in coordenadas:
-            coordenada = buscar_coordenada(aeroporto2)
-            if coordenada:
-                coordenadas[aeroporto2] = coordenada
-                alterou_coordenadas = True
-        if alterou_coordenadas:
-            data.save_coordenadas(coordenadas)
-            
+        current_app.config["GRAFO"] = construir_grafo_voos(voos)
+
+        # Atualiza coordenadas
+        for aeroporto in [voos[voo_id]["origem"], voos[voo_id]["destino"]]:
+            if aeroporto not in coordenadas:
+                coord = buscar_coordenada(aeroporto)
+                if coord:
+                    coordenadas[aeroporto] = coord
+        data.save_coordenadas(coordenadas)
+
         return redirect(url_for('admin.pagina_voos'))
 
-    return render_template('admin/voos_add.html')
+    return render_template('admin/voos_add.html', codigo=codigo_automatico)
 
 
 @admin_bp.route('/voos/remove/<voo_id>')

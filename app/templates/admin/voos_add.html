@@ -12,9 +12,19 @@
             <form method="POST">
 
                 <div class="mb-3">
-                    <label for="codigo" class="form-label">Código:</label>
-                    <input type="text" name="codigo" id="codigo" class="form-control" required>
-                </div>
+                    <label for="codigo" class="form-label">Código do voo</label>
+                    <input
+                        type="text"
+                        name="codigo"
+                        id="codigo"
+                        class="form-control bg-light text-muted"
+                        value="{{ codigo }}"
+                        readonly
+                    >
+                    <small class="form-text text-muted">
+                        Código gerado automaticamente pelo sistema
+                    </small>
+                </div>                
 
                 <div class="mb-3">
                     <label for="origem" class="form-label">Origem:</label>
