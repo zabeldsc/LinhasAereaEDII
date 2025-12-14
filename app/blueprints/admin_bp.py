@@ -78,6 +78,8 @@ def pagina_clientes():
 def add_voos():
     if request.method == "POST":
         voos = current_app.config.get('VOOS', {})
+        coordenadas = current_app.config.get('COORDENADAS', {})
+        
         voo_id = str(int(time.time()))
         voos[voo_id] = {
             "codigo": request.form["codigo"],
@@ -90,6 +92,14 @@ def add_voos():
         }
         current_app.config['VOOS'] = voos
         data.save_voos(voos)
+        
+        coordenada1 = voos[voo_id]["origem"]
+        coordenada2 = voos[voo_id]["destino"]
+        if coordenada1 not in coordenadas:
+            data.save_coordenadas(coordenada1)
+        if coordenada2 not in coordenadas:
+            data.save_coordenadas
+            
         return redirect(url_for('admin.pagina_voos'))
 
     return render_template('admin/voos_add.html')

@@ -9,6 +9,7 @@ VOOS_FILE = DATA_DIR / "voos.json"
 ADM_KEYS_FILE = DATA_DIR / "adm_keys.json"
 CLIENTES_FILE = DATA_DIR / "clientes.csv"
 RESERVAS_FILE = DATA_DIR / "reservas.json"
+COORDENADAS_FILE = DATA_DIR / "coordenadas.json"
 
 # ----------------------------
 # JSON HELPERS
@@ -49,6 +50,12 @@ def load_reservas():
 
 def save_reservas(reservas):
     save_json(RESERVAS_FILE, reservas)
+    
+def load_coordenadas():
+    return load_json(COORDENADAS_FILE)
+
+def save_coordenadas(coordenadas):
+    save_json(COORDENADAS_FILE, coordenadas)
 
 # ----------------------------
 # CSV HELPERS (Clientes)
