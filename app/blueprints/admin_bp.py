@@ -4,6 +4,7 @@ import time, string, ast
 from app import data
 from app.blueprints.user_bp import login_required_admin
 from app.search_structures.arvoreB import ArvoreB
+from app.search_structures.grafo import construir_grafo_voos
 from app.search_structures.lat_lon_search import buscar_coordenada
 
 admin_bp = Blueprint('admin', __name__, url_prefix='/admin')
@@ -92,6 +93,7 @@ def add_voos():
         }
         current_app.config['VOOS'] = voos
         data.save_voos(voos)
+        current_app.config["GRAFO"] = construir_grafo_voos(current_app.config["VOOS"])
         
         aeroporto1 = voos[voo_id]["origem"]
         aeroporto2 = voos[voo_id]["destino"]
@@ -123,6 +125,7 @@ def delete_voo(voo_id):
         del voos[voo_id]
         current_app.config['VOOS'] = voos
         data.save_voos(voos)
+        current_app.config["GRAFO"] = construir_grafo_voos(current_app.config["VOOS"])
     return redirect(url_for('admin.pagina_voos'))
 
 
@@ -146,6 +149,7 @@ def edit_voo(voo_id):
         }
         current_app.config['VOOS'] = voos
         data.save_voos(voos)
+        current_app.config["GRAFO"] = construir_grafo_voos(current_app.config["VOOS"])
         return redirect(url_for('admin.pagina_voos'))
 
     return render_template('admin/voo_edit.html', voo=voo, voo_id=voo_id)
