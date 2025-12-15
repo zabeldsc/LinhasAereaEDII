@@ -26,13 +26,17 @@ class Grafo:
     def dijkstra(self, origem, destino):
         if origem not in self.adj:
             return None
-
-        # heap: (custo_acumulado, cidade_atual, caminho_de_voos)
-        heap = [(0, origem, [])]
+        
+        #Contador de desempate
+        cont = 0
+        
+        # heap: (custo_acumulado, contador, cidade_atual, caminho_de_voos)
+        heap = [(0, cont, origem, [])]
         visitado = set()
 
         while heap:
-            custo, atual, caminho = heapq.heappop(heap)
+            #_ ignora o contador
+            custo, _, atual, caminho = heapq.heappop(heap)
 
             if atual in visitado:
                 continue
@@ -46,7 +50,8 @@ class Grafo:
             for prox, voo in self.vizinhos(atual):
                 if prox not in visitado:
                     novo_custo = custo + float(voo.get("preco_passagem", 0))
-                    heapq.heappush(heap, (novo_custo, prox, caminho + [voo]))
+                    cont += 1
+                    heapq.heappush(heap, (novo_custo, cont, prox, caminho + [voo]))
 
         return None  # Sem rota
 
