@@ -4,112 +4,135 @@
 
 {% block content %}
 <div class="container mt-4">
-    <h1 class="mb-4">Gestão de Clientes</h1>
 
-    {% with messages = get_flashed_messages(with_categories=true) %}
-      {% if messages %}
-        {% for category, message in messages %}
-          <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
-            {{ message }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-          </div>
-        {% endfor %}
-      {% endif %}
-    {% endwith %}
-
-    <div class="card p-3 mb-4 bg-light">
-        <form method="GET" action="{{ url_for('admin.pagina_clientes') }}" class="row g-3">
-            
-            <div class="col-md-5">
-                <div class="input-group">
-                    <span class="input-group-text"><i class="fas fa-id-card"></i></span>
-                    <input type="text" name="buscar_cpf" class="form-control" 
-                           placeholder="Buscar CPF exato..." 
-                           value="{{ request.args.get('buscar_cpf') or request.form.get('buscar_cpf', '') }}">
-                </div>
-            </div>
-
-            <div class="col-md-5">
-                <div class="input-group">
-                    <span class="input-group-text"><i class="fas fa-user"></i></span>
-                    <input type="text" name="buscar_nome" class="form-control" 
-                           placeholder="Buscar parte do nome..." 
-                           value="{{ request.args.get('buscar_nome') or request.form.get('buscar_nome', '') }}">
-                </div>
-            </div>
-
-            <div class="col-md-2 d-grid">
-                <button class="btn btn-primary" type="submit">Pesquisar</button>
-            </div>
-        </form>
-        
-        {% if request.args.get('buscar_cpf') or request.args.get('buscar_nome') or request.form.get('buscar_cpf') or request.form.get('buscar_nome') or request.args.get('letra') %}
-        <div class="mt-2 text-end">
-            <a href="{{ url_for('admin.pagina_clientes') }}" class="text-decoration-none text-danger">
-                <small>✕ Limpar filtros e mostrar todos</small>
-            </a>
-        </div>
-        {% endif %}
+    <!-- Título -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="fw-semibold mb-0 fs-4">
+            <i class="bi bi-people me-2 text-primary"></i>
+            Gestão de Clientes
+        </h1>
     </div>
 
-    <div class="mb-4 text-center">
-        <div class="btn-group flex-wrap" role="group" aria-label="Filtro por letra">
-            <a href="{{ url_for('admin.pagina_clientes') }}" 
-               class="btn btn-sm btn-outline-secondary {% if not request.args.get('letra') %}active{% endif %}">
-               Todos
-            </a>
-            {% for letra in alfabeto %}
-                <a href="{{ url_for('admin.pagina_clientes', letra=letra) }}" 
-                   class="btn btn-sm btn-outline-primary {% if request.args.get('letra') == letra %}active{% endif %}">
-                   {{ letra }}
+    <!-- Filtros -->
+    <div class="card shadow-sm border-0 mb-4">
+        <div class="card-body">
+            <form method="GET" action="{{ url_for('admin.pagina_clientes') }}" class="row g-3">
+
+                <div class="col-md-5">
+                    <label class="form-label small text-muted">CPF</label>
+                    <div class="input-group">
+                        <span class="input-group-text">
+                            <i class="bi bi-person-vcard"></i>
+                        </span>
+                        <input type="text" id="buscar_cpf" name="buscar_cpf" class="form-control"
+                            placeholder="Buscar CPF"
+                            value="{{ request.args.get('buscar_cpf') or request.form.get('buscar_cpf', '') }}">
+                    </div>
+                </div>
+
+                <div class="col-md-5">
+                    <label class="form-label small text-muted">Nome</label>
+                    <div class="input-group">
+                        <span class="input-group-text">
+                            <i class="bi bi-person"></i>
+                        </span>
+                        <input type="text" name="buscar_nome" class="form-control" placeholder="Buscar nome"
+                            value="{{ request.args.get('buscar_nome') or request.form.get('buscar_nome', '') }}">
+                    </div>
+                </div>
+
+                <div class="col-md-2 d-grid align-items-end">
+                    <button class="btn btn-primary">
+                        <i class="bi bi-search me-1"></i>
+                        Pesquisar
+                    </button>
+                </div>
+            </form>
+
+            {% if request.args.get('buscar_cpf') or request.args.get('buscar_nome') or request.args.get('letra') %}
+            <div class="mt-3 text-end">
+                <a href="{{ url_for('admin.pagina_clientes') }}" class="small text-danger text-decoration-none">
+                    <i class="bi bi-x-circle me-1"></i>
+                    Limpar filtros
                 </a>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Filtro por letra -->
+    <div class="mb-4 text-center">
+        <div class="btn-group flex-wrap" role="group">
+            <a href="{{ url_for('admin.pagina_clientes') }}"
+                class="btn btn-sm btn-outline-secondary {% if not request.args.get('letra') %}active{% endif %}">
+                Todos
+            </a>
+
+            {% for letra in alfabeto %}
+            <a href="{{ url_for('admin.pagina_clientes', letra=letra) }}"
+                class="btn btn-sm btn-outline-primary {% if request.args.get('letra') == letra %}active{% endif %}">
+                {{ letra }}
+            </a>
             {% endfor %}
         </div>
     </div>
 
+    <!-- Lista de clientes -->
     <div class="row">
         {% for cliente in clientes %}
-        <div class="col-md-4 mb-3">
+        <div class="col-md-4 mb-4">
             <div class="card h-100 shadow-sm border-0">
+
                 <div class="card-body">
-                    <div class="d-flex justify-content-between align-items-start">
-                        <h5 class="card-title text-primary fw-bold">{{ cliente.nome }}</h5>
-                        <span class="badge bg-success">{{ cliente.milhas }} milhas</span>
+                    <div class="d-flex justify-content-between align-items-start mb-2">
+                        <h5 class="fw-semibold mb-0 text-primary">
+                            {{ cliente.nome }}
+                        </h5>
+                        <span class="badge bg-success">
+                            {{ cliente.milhas }} milhas
+                        </span>
                     </div>
-                    <h6 class="card-subtitle mb-3 text-muted">CPF: {{ cliente.cpf }}</h6>
-                    
+
+                    <div class="text-muted small mb-3">
+                        CPF: {{ cliente.cpf }}
+                    </div>
+
                     <ul class="list-group list-group-flush small">
                         <li class="list-group-item px-0">
-                            <strong>Email:</strong> {{ cliente.email }}
+                            <i class="bi bi-envelope me-1"></i>
+                            {{ cliente.email }}
                         </li>
-                        
+
                         <li class="list-group-item px-0">
-                            <strong>Próxima Viagem:</strong> 
+                            <i class="bi bi-calendar-event me-1"></i>
+                            <strong>Próxima viagem:</strong>
                             {% if cliente.data_viagem %}
-                                {{ cliente.data_viagem }}
+                            {{ cliente.data_viagem }}
                             {% else %}
-                                <span class="text-muted">Nenhuma agendada</span>
+                            <span class="text-muted">Nenhuma agendada</span>
                             {% endif %}
                         </li>
 
                         <li class="list-group-item px-0">
-                            <strong>Viagens Totais:</strong> 
-                            {% if cliente.reservas is sequence %}
-                                {{ cliente.reservas|length }}
-                            {% else %}
-                                0
-                            {% endif %}
+                            <i class="bi bi-airplane me-1"></i>
+                            <strong>Viagens totais:</strong>
+                            {{ cliente.reservas|length if cliente.reservas is sequence else 0 }}
                         </li>
                     </ul>
                 </div>
+
             </div>
         </div>
         {% else %}
         <div class="col-12 text-center py-5">
-            <h4 class="text-muted">Nenhum cliente encontrado.</h4>
-            <p>Verifique o CPF ou o Nome digitado.</p>
+            <i class="bi bi-emoji-frown fs-1 text-muted"></i>
+            <h4 class="text-muted mt-3">Nenhum cliente encontrado</h4>
+            <p class="small text-muted">
+                Ajuste os filtros ou verifique os dados informados.
+            </p>
         </div>
         {% endfor %}
     </div>
+
 </div>
 {% endblock %}

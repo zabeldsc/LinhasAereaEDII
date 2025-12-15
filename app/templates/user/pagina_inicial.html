@@ -1,32 +1,80 @@
 {% extends "user/base_user.html" %}
 
-{% block title %}Página Inicial{% endblock %}
+{% block title %}AirFlow{% endblock %}
 
 {% block content %}
-<div class="text-center mb-5">
-    <h1 class="text-primary mb-3">Bem-vindo ao Sistema de Voos</h1>
-    <p class="mb-4 fs-5">Confira os voos disponíveis:</p>
+
+<!-- HERO / BANNER -->
+<div class="container-fluid px-0 mb-5">
+    <div class="position-relative rounded-4 overflow-hidden">
+        <img src="https://images.unsplash.com/photo-1603041080359-2f930d7db86e?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+            class="img-fluid w-100" style="max-height: 460px; object-fit: cover;" alt="Avião comercial">
+
+        <div class="position-absolute w-100 h-100 top-0 start-0" style="background: rgba(0, 40, 80, 0.35);">
+        </div>
+
+        <!-- Texto ocupando mais área (sem aumentar fonte) -->
+        <div class="position-absolute top-50 start-50 translate-middle
+                    text-center text-white w-100 px-5">
+            <div class="mx-auto" style="max-width: 900px;">
+                <h1 class="fw-bolder display-5 mb-3" style="color: #f1f5f9; text-shadow: 2px 2px 4px rgba(0,0,0,0.7);">
+                    Seu próximo destino começa aqui
+                </h1>
+                <p class="fs-4 fw-light mb-0" style="color: #e2e8f0; text-shadow: 1px 1px 3px rgba(0,0,0,0.7);">
+                    Encontre voos nacionais e internacionais com as melhores ofertas
+                </p>
+            </div>
+        </div>
+    </div>
 </div>
 
-{% if voos %}
+<div class="container">
+
+    <!-- TÍTULO -->
+    <div class="text-center mb-5">
+        <h2 class="text-primary mb-2">Voos Disponíveis</h2>
+        <p class="text-muted">Escolha seu próximo destino</p>
+    </div>
+
+    {% if voos %}
     <div class="row row-cols-1 row-cols-md-3 g-4">
         {% for id, voo in voos.items() %}
         <div class="col">
-            <div class="card h-100 shadow-sm">
+            <div class="card h-100 shadow-sm border-0">
+                <!-- IMAGEM DO CARD -->
+                <img src="https://images.unsplash.com/photo-1720842223498-7b933206062c?q=80&w=1632&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                    class="card-img-top" alt="Avião" style="height: 180px; object-fit: cover;">
+
                 <div class="card-body">
-                    <h5 class="card-title">{{ voo.codigo }}</h5>
-                    <p class="card-text">
-                        <strong>Origem:</strong> {{ voo.origem }}<br>
-                        <strong>Destino:</strong> {{ voo.destino }}<br>
-                        <strong>Milhas:</strong> {{ voo.milhas }}<br>
-                        <strong>Preço:</strong> R$ {{ voo.preco_passagem }}
+                    <h5 class="card-title text-primary">
+                        {{ voo.origem }} → {{ voo.destino }}
+                    </h5>
+                    <p class="card-text small mb-1">
+                        <i class="bi bi-airplane-engines"></i> <strong>Milhas:</strong> {{ voo.milhas }}
                     </p>
+                    <p class="card-text small">
+                        <i class="bi bi-cash-stack"></i> <strong>Preço:</strong> R$ {{ voo.preco_passagem }}
+                    </p>
+                </div>
+
+                <div class="card-footer bg-white border-0 d-flex justify-content-between align-items-center">
+                    <span class="fw-bold text-success">
+                        R$ {{ voo.preco_passagem }}
+                    </span>
+                    <a href="{{ url_for('user.cadastro') }}" class="btn btn-outline-primary btn-sm">
+                        Ver detalhes
+                    </a>
                 </div>
             </div>
         </div>
         {% endfor %}
     </div>
-{% else %}
-    <div class="alert alert-info text-center">Nenhum voo disponível no momento.</div>
-{% endif %}
+    {% else %}
+    <div class="alert alert-info text-center">
+        Nenhum voo disponível no momento.
+    </div>
+    {% endif %}
+
+</div>
+
 {% endblock %}

@@ -6,17 +6,44 @@
 <h2 class="mb-4">Consultar Voos</h2>
 
 <!-- Formulário de filtro -->
-<form method="GET" class="row g-3 mb-4">
-    <div class="col-md-5">
-        <input type="text" name="origem" class="form-control" placeholder="Origem" value="{{ filtro_origem }}">
+<div class="card shadow-sm mb-4">
+    <div class="card-body">
+        <form method="GET" class="row g-3 align-items-end">
+            
+            <div class="col-md-5">
+                <label for="origem" class="form-label fw-bold text-muted small">Origem</label>
+                <select name="origem" id="origem" class="form-select">
+                    <option value="" {% if not filtro_origem %}selected{% endif %}>Todas as origens</option>
+                    
+                    {% for codigo in aeroportos %}
+                    <option value="{{ codigo }}" {% if codigo == filtro_origem %}selected{% endif %}>
+                        {{ codigo }}
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="col-md-5">
+                <label for="destino" class="form-label fw-bold text-muted small">Destino</label>
+                <select name="destino" id="destino" class="form-select">
+                    <option value="" {% if not filtro_destino %}selected{% endif %}>Todos os destinos</option>
+                    
+                    {% for codigo in aeroportos %}
+                    <option value="{{ codigo }}" {% if codigo == filtro_destino %}selected{% endif %}>
+                        {{ codigo }}
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="col-md-2">
+                <button type="submit" class="btn btn-primary w-100 fw-bold">
+                    <i class="bi bi-filter"></i> Filtrar
+                </button>
+            </div>
+        </form>
     </div>
-    <div class="col-md-5">
-        <input type="text" name="destino" class="form-control" placeholder="Destino" value="{{ filtro_destino }}">
-    </div>
-    <div class="col-md-2">
-        <button type="submit" class="btn btn-primary w-100">Filtrar</button>
-    </div>
-</form>
+</div>
 
 <!-- Tabela de voos -->
 <table class="table table-striped">
@@ -35,11 +62,11 @@
     <tbody>
         {% for id, voo in voos.items() %}
         <tr>
-            <td>{{ voo.codigo }}</td>
+            <td class="fw-semibold">{{ voo.codigo }}</td>
             <td>{{ voo.origem }}</td>
             <td>{{ voo.destino }}</td>
             <td>{{ voo.milhas }}</td>
-            <td>R$ {{ voo.preco_passagem }}</td>
+            <td class="fw-semibold text-success">R$ {{ voo.preco_passagem }}</td>
             <td>{{ voo.tipo_aeronave }}</td>
             <td>{{ voo.num_assentos }}</td>
             <td>
