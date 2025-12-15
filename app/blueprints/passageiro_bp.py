@@ -24,6 +24,8 @@ def dashboard():
 @login_required_passageiro
 def consultar_voos():
     voos = current_app.config.get('VOOS', {})
+    coordenadas = data.load_coordenadas()
+    aeroportos = sorted(coordenadas.keys())
     filtro_origem = request.args.get('origem', '')
     filtro_destino = request.args.get('destino', '')
 
@@ -34,7 +36,8 @@ def consultar_voos():
     }
 
     return render_template('passageiro/consultar_voos.html', voos=voos_filtrados,
-                           filtro_origem=filtro_origem, filtro_destino=filtro_destino)
+                           filtro_origem=filtro_origem, filtro_destino=filtro_destino,
+                           aeroportos=aeroportos)
     
 @passageiro_bp.route('/consultar_voos/reservar/<voo_id>', methods=['GET', 'POST'])
 @login_required_passageiro
