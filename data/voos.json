@@ -278,22 +278,121 @@
         "tipo_aeronave": "Boeing 777",
         "num_assentos": "300"
     },
-    "1765732265": {
-        "codigo": "VOO101",
-        "origem": "São Paulo",
-        "destino": "Salvador",
-        "milhas": "1200",
-        "preco_passagem": "20.75",
-        "tipo_aeronave": "Não Sei",
+    "1765822160": {
+        "codigo": "VOO132",
+        "origem": "Fortaleza",
+        "destino": "Belém",
+        "milhas": "1450",
+        "preco_passagem": "550.00",
+        "tipo_aeronave": "Airbus A320",
+        "num_assentos": "150"
+    },
+    "1765822321": {
+        "codigo": "VOO133",
+        "origem": "Rio de Janeiro",
+        "destino": "Belém",
+        "milhas": "1550",
+        "preco_passagem": "570.00",
+        "tipo_aeronave": "Embraer 195",
+        "num_assentos": "120"
+    },
+    "1765822433": {
+        "codigo": "VOO134",
+        "origem": "Rio de Janeiro",
+        "destino": "São Paulo",
+        "milhas": "300",
+        "preco_passagem": "250.50",
+        "tipo_aeronave": "Boeing 737",
         "num_assentos": "180"
     },
-    "1765747935": {
-        "codigo": "VOO1765747935",
+    "1765822528": {
+        "codigo": "VOO135",
+        "origem": "Salvador",
+        "destino": "Brasília",
+        "milhas": "1200",
+        "preco_passagem": "550.00",
+        "tipo_aeronave": "Airbus A320",
+        "num_assentos": "150"
+    },
+    "1765822614": {
+        "codigo": "VOO136",
+        "origem": "Porto Alegre",
+        "destino": "Curitiba",
+        "milhas": "500",
+        "preco_passagem": "280.00",
+        "tipo_aeronave": "Boeing 737",
+        "num_assentos": "180"
+    },
+    "1765822674": {
+        "codigo": "VOO137",
+        "origem": "São Paulo",
+        "destino": "Curitiba",
+        "milhas": "350",
+        "preco_passagem": "200.00",
+        "tipo_aeronave": "Embraer 195",
+        "num_assentos": "120"
+    },
+    "1765822787": {
+        "codigo": "VOO138",
+        "origem": "Fortaleza",
+        "destino": "Salvador",
+        "milhas": "800",
+        "preco_passagem": "390.50",
+        "tipo_aeronave": "Airbus A320",
+        "num_assentos": "150"
+    },
+    "1765822874": {
+        "codigo": "VOO139",
+        "origem": "Fortaleza",
+        "destino": "São Paulo",
+        "milhas": "1600",
+        "preco_passagem": "580",
+        "tipo_aeronave": "Embraer 195",
+        "num_assentos": "120"
+    },
+    "1765822955": {
+        "codigo": "VOO140",
+        "origem": "Recife",
+        "destino": "Brasília",
+        "milhas": "1350",
+        "preco_passagem": "500.50",
+        "tipo_aeronave": "Boeing 737",
+        "num_assentos": "180"
+    },
+    "1765823700": {
+        "codigo": "VOO141",
         "origem": "Curitiba",
         "destino": "Salvador",
-        "milhas": "1200",
-        "preco_passagem": "5000,00",
-        "tipo_aeronave": "Boeing 167",
-        "num_assentos": "200"
+        "milhas": "1100",
+        "preco_passagem": "450.00",
+        "tipo_aeronave": "Airbus A320",
+        "num_assentos": "150"
+    },
+    "1765824293": {
+        "codigo": "VOO142",
+        "origem": "Porto Alegre",
+        "destino": "São Paulo",
+        "milhas": "900",
+        "preco_passagem": "400.00",
+        "tipo_aeronave": "Embraer 195",
+        "num_assentos": "120"
+    },
+    "1765824596": {
+        "codigo": "VOO143",
+        "origem": "São Paulo",
+        "destino": "Salvador",
+        "milhas": "1100",
+        "preco_passagem": "450.50",
+        "tipo_aeronave": "Embraer 195",
+        "num_assentos": "120"
+    },
+    "1765837137": {
+        "codigo": "VOO144",
+        "origem": "Manaus",
+        "destino": "Caracas",
+        "milhas": "1100",
+        "preco_passagem": "1200.00",
+        "tipo_aeronave": "Boeing 737",
+        "num_assentos": "180"
     }
 }
