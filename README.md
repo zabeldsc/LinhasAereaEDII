@@ -17,7 +17,7 @@ Alunos - Samuel Cesar e Isabel Souza
 3. Execute o servidor Flask:
    ```bash
     cd flaskr
-    python3 app.py
+    python3 run.py
 
 4. No navegador acesse o link da pagina:
     http://127.0.0.1:5000/
